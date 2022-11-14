@@ -18,7 +18,7 @@ def createMask(keys, height, width, img=None):
     
     if img != None:
       newImg = img.clone().detach().to(DEVICE)
-      newImg[:, (height*keys[:, 1]).long(), (width*keys[:, 0]).long()] = 255
+      newImg[:, (height*keys[:, 1]).long(), (width*keys[:, 0]).long()] = 255.0
       return newImg
     else: 
       mask = torch.zeros((height, width), device=DEVICE)
@@ -27,16 +27,19 @@ def createMask(keys, height, width, img=None):
 
 
 def showImageTensor(img, is3chan=True, isOutput=False, returnOutput=False):
+  newImg = img.clone().detach()
   if isOutput:
-    img = torch.squeeze(img)
-    img /= 255
-  img = img.cpu()
+    newImg = torch.squeeze(newImg)
+    
+  newImg = newImg.to('cpu')
+  
   if is3chan:
-    plt.imshow(img.permute(1, 2, 0))
+    # plt.imshow((newImg.permute(1, 2, 0)*255).int())
+    plt.imshow((newImg.permute(1, 2, 0)))
   else:
-    plt.imshow(img)
+    plt.imshow(newImg)
   if returnOutput:
-    return img
+    return newImg
 
 def createDiffMask(dataRef, dataTarg):
     dKey = dataRef - dataTarg
