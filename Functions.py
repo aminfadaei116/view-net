@@ -14,16 +14,19 @@ from HyperParameters import *
 
 
 
-def showMask(data, height, width, img=None):
+def createMask(keys, height, width, img=None):
+    
     if img != None:
-      img[(height*data[:, 1]).long(), (width*data[:, 0]).long()] = 1
+      newImg = img.clone().detach().to(DEVICE)
+      newImg[:, (height*keys[:, 1]).long(), (width*keys[:, 0]).long()] = 255
+      return newImg
     else: 
       mask = torch.zeros((height, width), device=DEVICE)
-      mask[(height*data[:, 1]).long(), (width*data[:, 0]).long()] = 1
-    return mask
+      mask[(height*keys[:, 1]).long(), (width*keys[:, 0]).long()] = 1
+      return mask
 
 
-def showImageTensor(img, is3chan=True, isOutput=False, output=False):
+def showImageTensor(img, is3chan=True, isOutput=False, returnOutput=False):
   if isOutput:
     img = torch.squeeze(img)
     img /= 255
@@ -32,16 +35,11 @@ def showImageTensor(img, is3chan=True, isOutput=False, output=False):
     plt.imshow(img.permute(1, 2, 0))
   else:
     plt.imshow(img)
-  if output:
+  if returnOutput:
     return img
 
 def createDiffMask(dataRef, dataTarg):
-    # flowX = torch.zeros((height, width), dtype=torch.float64, device=DEVICE)
-    # flowY = torch.zeros((height, width), dtype=torch.float64, device=DEVICE)
     dKey = dataRef - dataTarg
-    # flowX[torch.floor((height*dataRef[:, 1])).long(), torch.floor((width*dataRef[:, 0])).long()] = dKey[:,0]
-    # flowY[torch.floor((height*dataRef[:, 1])).long(), torch.floor((width*dataRef[:, 0])).long()] = dKey[:,1]
-    # return flowX, flowY
     return dKey[:,0], dKey[:,1]
 
 
@@ -88,7 +86,7 @@ def createDiffMask(dataRef, dataTarg):
 #         return sum(dKey[kk])/numClosest
     
 
-def MyInterpol(height, width, dataRef, dataTarg, var, distMethod):
+def MyInterpol(height, width, dataRef, dataTarg, sd, distMethod):
     dKey = dataRef - dataTarg
     flowX, flowY = dKey[:,0], dKey[:,1]
     d1 = torch.linspace(0, 1, height, device=DEVICE)
@@ -104,7 +102,7 @@ def MyInterpol(height, width, dataRef, dataTarg, var, distMethod):
     MeshXE = MeshXE - dataRef[:, 1].view(-1, 1, 1)
     MeshYE = MeshYE - dataRef[:, 0].view(-1, 1, 1)
 
-    MeshE = torch.exp(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * var * var))
+    MeshE = torch.exp(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd))
     WeightMeshX = MeshE * flowX.view(-1, 1, 1)
     WeightMeshY = MeshE * flowY.view(-1, 1, 1)
 
@@ -118,14 +116,20 @@ def RenderImage(height, width, refKey, tarKey, img):
     d1 = torch.linspace(-1, 1, height)
     d2 = torch.linspace(-1, 1, width)
     meshx, meshy = torch.meshgrid(d1, d2, indexing='ij')
-    meshx, meshy = meshx.to(DEVICE), meshy.to(DEVICE)
+    # meshx, meshy = meshx.to(DEVICE), meshy.to(DEVICE)
+
+    meshx = meshx.clone().detach().to(DEVICE)
+    meshy = meshy.clone().detach().to(DEVICE)
+
     meshx = meshx + Y
     meshy = meshy + X
     grid = torch.stack((meshy, meshx), 2)
     grid = grid.unsqueeze(0)
-    img = torch.tensor(img, dtype=torch.float, device=DEVICE)
+    #img = torch.tensor(img, dtype=torch.float, device=DEVICE)
+    img = img.float().to(DEVICE)
     img = torch.unsqueeze(img, 0)
-    grid = torch.tensor(grid, dtype=torch.float)
+    # grid = torch.tensor(grid, dtype=torch.float)
+    grid = grid.float()
     output = torch.nn.functional.grid_sample(img, grid, padding_mode="border",align_corners=True)
     return output
 
