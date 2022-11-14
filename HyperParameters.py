@@ -15,5 +15,5 @@ PathNPY2 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_7\Image_1
 PathImg1 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_7\Image_134.jpg"
 PathImg2 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_7\Image_182.jpg"
 
-DEVICE=torch.device('cuda')
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 pi = 3.14159265359
