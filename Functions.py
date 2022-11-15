@@ -41,6 +41,34 @@ def showImageTensor(img, is3chan=True, isOutput=False, returnOutput=False):
     return newImg
 
 
+def draw(width, height, refKey, tarKey, size=10, connect=False):
+
+  key1 = torch.zeros((len(refKey), 2))
+  key2 = torch.zeros((len(tarKey), 2))
+  key1[:, 0] = refKey[:, 0]
+  key1[:, 1] = tarKey[:, 0]
+
+  key2[:, 0] = refKey[:, 1]
+  key2[:, 1] = tarKey[:, 1]
+
+
+  if connect:
+    for i in range(len(key1)):
+        plt.plot(key1[i].cpu().numpy()*width, key2[i].cpu().numpy()*height)
+      
+  plt.scatter(refKey[:,0].cpu().numpy()*width, refKey[:,1].cpu().numpy()*height, s=size)
+  plt.scatter(tarKey[:,0].cpu().numpy()*width, tarKey[:,1].cpu().numpy()*height, s=size)
+
+  plt.xlim(0, width-1)
+  plt.ylim(0, height-1)
+  plt.xlabel("x axis")
+  plt.ylabel("y axis")
+
+  ax = plt.gca()
+  ax.set_aspect('equal', adjustable='box')
+  plt.gca().invert_yaxis()
+  plt.show()
+
 
 # def measureWeight(x, y, data2, dKey, InterCov, distMethod):
 #     Sum = torch.zeros(1, device=DEVICE)
