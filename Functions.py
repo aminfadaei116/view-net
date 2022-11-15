@@ -30,9 +30,8 @@ def showImageTensor(img, is3chan=True, isOutput=False, returnOutput=False):
   newImg = img.clone().detach()
   if isOutput:
     newImg = torch.squeeze(newImg)
-    
-  newImg = newImg.to('cpu')
-  
+
+  newImg = newImg.to('cpu')  
   if is3chan:
     # plt.imshow((newImg.permute(1, 2, 0)*255).int())
     plt.imshow((newImg.permute(1, 2, 0)))
@@ -41,9 +40,6 @@ def showImageTensor(img, is3chan=True, isOutput=False, returnOutput=False):
   if returnOutput:
     return newImg
 
-def createDiffMask(dataRef, dataTarg):
-    dKey = dataRef - dataTarg
-    return dKey[:,0], dKey[:,1]
 
 
 # def measureWeight(x, y, data2, dKey, InterCov, distMethod):
@@ -134,7 +130,7 @@ def RenderImage(height, width, refKey, tarKey, img):
     # grid = torch.tensor(grid, dtype=torch.float)
     grid = grid.float()
     output = torch.nn.functional.grid_sample(img, grid, padding_mode="border",align_corners=True)
-    return output
+    return output, meshx, meshy
 
 
 def TransformKeys(keys, euler, T):
