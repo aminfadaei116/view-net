@@ -35,8 +35,12 @@ def showImageTensor(img, is3chan=True, isOutput=False, returnOutput=False):
   if is3chan:
     # plt.imshow((newImg.permute(1, 2, 0)*255).int())
     plt.imshow((newImg.permute(1, 2, 0)))
+    plt.xlabel("x axis")
+    plt.ylabel("y axis")
   else:
     plt.imshow(newImg)
+    plt.xlabel("x axis")
+    plt.ylabel("y axis")
   if returnOutput:
     return newImg
 
@@ -113,33 +117,40 @@ def draw(width, height, refKey, tarKey, size=10, connect=False):
 #         return sum(dKey[kk])/numClosest
     
 
-def MyInterpol(height, width, dataRef, dataTarg, sd, distMethod):
+def MyInterpol(height, width, dataRef, dataTarg, sd, eps, distMethod):
+    
     dKey = dataRef - dataTarg
     flowX, flowY = dKey[:,0], dKey[:,1]
     d1 = torch.linspace(0, 1, height, device=DEVICE)
     d2 = torch.linspace(0, 1, width, device=DEVICE)
 
-    meshx, meshy = torch.meshgrid(d1, d2, indexing='ij') 
+    # meshx, meshy = torch.meshgrid(d1, d2, indexing='ij') 
+    meshy, meshx = torch.meshgrid(d1, d2, indexing='ij')
     # mx = meshx.clone()
     # my = meshy.clone()
     MeshXE = meshx.expand(478, 480, 640)
     MeshYE = meshy.expand(478, 480, 640)
 
 
-    MeshXE = MeshXE - dataRef[:, 1].view(-1, 1, 1)
-    MeshYE = MeshYE - dataRef[:, 0].view(-1, 1, 1)
-
-    MeshE = torch.exp(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd))
+    MeshXE = MeshXE - dataRef[:, 0].view(-1, 1, 1)
+    MeshYE = MeshYE - dataRef[:, 1].view(-1, 1, 1)
+    if distMethod == "gaussian":
+      MeshE = torch.exp(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd))
+    elif distMethod == "l2":
+      MeshE = 1/(MeshXE * MeshXE + MeshYE * MeshYE + eps)
+    else:
+      print("Distance method not found")
     WeightMeshX = MeshE * flowX.view(-1, 1, 1)
     WeightMeshY = MeshE * flowY.view(-1, 1, 1)
 
     InterpolatedFlowX = torch.sum(WeightMeshX, dim=0)/torch.sum(MeshE, dim=0)
     InterpolatedFlowY = torch.sum(WeightMeshY, dim=0)/torch.sum(MeshE, dim=0)
+
     return 2 * InterpolatedFlowX, 2 * InterpolatedFlowY
 
 
-def RenderImage(height, width, refKey, tarKey, img):
-    X, Y = MyInterpol(height, width, refKey, tarKey, 0.1, "nn")
+def RenderImage(height, width, refKey, tarKey, img, sd=0.01, eps=1e-10, distMethod="gaussian"):
+    X, Y = MyInterpol(height, width, refKey, tarKey, sd, eps, distMethod)
     d1 = torch.linspace(-1, 1, height)
     d2 = torch.linspace(-1, 1, width)
     meshx, meshy = torch.meshgrid(d1, d2, indexing='ij')
@@ -158,7 +169,7 @@ def RenderImage(height, width, refKey, tarKey, img):
     # grid = torch.tensor(grid, dtype=torch.float)
     grid = grid.float()
     output = torch.nn.functional.grid_sample(img, grid, padding_mode="border",align_corners=True)
-    return output, meshx, meshy
+    return output
 
 
 def TransformKeys(keys, euler, T):
