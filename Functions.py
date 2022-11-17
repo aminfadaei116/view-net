@@ -26,6 +26,21 @@ def createMask(keys, height, width, img=None):
       return mask
 
 
+def createMask2(keys, height, width, img=None):
+    
+    if img != None:
+      newImg = img.clone().detach().to(DEVICE)
+      for i in range(-1, 2):
+        for j in range(-1, 2):
+          newImg[:, (height*keys[:, 1]).long()+i, (width*keys[:, 0]).long()+j] = 255.0
+      return newImg
+    else: 
+      mask = torch.zeros((height, width), device=DEVICE)
+      for i in range(-1, 2):
+        for j in range(-1, 2):
+          mask[(height*keys[:, 1]).long()+i, (width*keys[:, 0]).long()+j] = 1
+      return mask
+
 def showImageTensor(img, is3chan=True, isOutput=False, returnOutput=False):
   newImg = img.clone().detach()
   if isOutput:
@@ -128,8 +143,8 @@ def MyInterpol(height, width, dataRef, dataTarg, sd, eps, distMethod):
     meshy, meshx = torch.meshgrid(d1, d2, indexing='ij')
     # mx = meshx.clone()
     # my = meshy.clone()
-    MeshXE = meshx.expand(478, 480, 640)
-    MeshYE = meshy.expand(478, 480, 640)
+    MeshXE = meshx.expand(len(dataRef), 480, 640)
+    MeshYE = meshy.expand(len(dataRef), 480, 640)
 
 
     MeshXE = MeshXE - dataRef[:, 0].view(-1, 1, 1)
