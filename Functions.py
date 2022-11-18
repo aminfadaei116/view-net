@@ -132,9 +132,12 @@ def draw(width, height, refKey, tarKey, size=10, connect=False):
 #         return sum(dKey[kk])/numClosest
     
 
-def MyInterpol(height, width, dataRef, dataTarg, sd, eps, distMethod):
+def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod="gaussian"):
     
-    dKey = dataRef - dataTarg
+  
+    dKey = dataTarg - dataRef 
+
+
     flowX, flowY = dKey[:,0], dKey[:,1]
     d1 = torch.linspace(0, 1, height, device=DEVICE)
     d2 = torch.linspace(0, 1, width, device=DEVICE)
@@ -147,8 +150,8 @@ def MyInterpol(height, width, dataRef, dataTarg, sd, eps, distMethod):
     MeshYE = meshy.expand(len(dataRef), 480, 640)
 
 
-    MeshXE = MeshXE - dataRef[:, 0].view(-1, 1, 1)
-    MeshYE = MeshYE - dataRef[:, 1].view(-1, 1, 1)
+    MeshXE = MeshXE - dataTarg[:, 0].view(-1, 1, 1)
+    MeshYE = MeshYE - dataTarg[:, 1].view(-1, 1, 1)
     if distMethod == "gaussian":
       MeshE = torch.exp(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd))
     elif distMethod == "l2":
@@ -168,15 +171,16 @@ def RenderImage(height, width, refKey, tarKey, img, sd=0.01, eps=1e-10, distMeth
     X, Y = MyInterpol(height, width, refKey, tarKey, sd, eps, distMethod)
     d1 = torch.linspace(-1, 1, height)
     d2 = torch.linspace(-1, 1, width)
-    meshx, meshy = torch.meshgrid(d1, d2, indexing='ij')
+    meshy, meshx = torch.meshgrid(d1, d2, indexing='ij')
     # meshx, meshy = meshx.to(DEVICE), meshy.to(DEVICE)
 
     meshx = meshx.clone().detach().to(DEVICE)
     meshy = meshy.clone().detach().to(DEVICE)
 
-    meshx = meshx + Y
-    meshy = meshy + X
-    grid = torch.stack((meshy, meshx), 2)
+    meshx = meshx - X
+    meshy = meshy - Y
+
+    grid = torch.stack((meshx, meshy), 2)
     grid = grid.unsqueeze(0)
     #img = torch.tensor(img, dtype=torch.float, device=DEVICE)
     img = img.float().to(DEVICE)
