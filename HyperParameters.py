@@ -8,6 +8,7 @@ This script contains the hyper parameters of our model
 """
 
 import torch
+import mediapipe as mp
 
 PathNPY1 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_7\Image_134.npy"
 PathNPY2 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_7\Image_182.npy"
@@ -17,5 +18,10 @@ PathImg2 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_7\Image_1
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # DEVICE = torch.device('cpu')
+
+
+mp_drawing = mp.solutions.drawing_utils
+mp_drawing_styles = mp.solutions.drawing_styles
+mp_face_mesh = mp.solutions.face_mesh
 
 pi = 3.14159265359
