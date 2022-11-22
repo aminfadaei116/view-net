@@ -89,48 +89,6 @@ def draw(width, height, refKey, tarKey, size=10, connect=False):
   plt.show()
 
 
-# def measureWeight(x, y, data2, dKey, InterCov, distMethod):
-#     Sum = torch.zeros(1, device=DEVICE)
-#     Wsum = torch.zeros(1, device=DEVICE)
-    
-#     if(distMethod == "gaussian"):
-#         d1 = torch.linspace(0, 1, height, device=DEVICE)
-#         d2 = torch.linspace(0, 1, width, device=DEVICE)
-
-#         meshx, meshy = torch.meshgrid(d1, d2, indexing='ij') 
-#         mx = meshx.clone()
-#         my = meshy.clone()
-#         MeshXE = mx.expand(478, 480, 640)
-#         MeshYE = my.expand(478, 480, 640)
-
-
-#         MeshXE = MeshXE - refKey[:, 1].view(-1, 1, 1)
-#         MeshYE = MeshYE - refKey[:, 0].view(-1, 1, 1)
-
-#         MeshE = torch.exp(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * 0.01 * 0.01))
-        
-#         WeightMeshX = MeshE * flowX.view(-1, 1, 1)
-#         WeightMeshY = MeshE * flowX.view(-1, 1, 1)
-
-#         InterpolatedFlowX = torch.sum(WeightMeshX, dim=0)/torch.sum(MeshE, dim=0)
-#         InterpolatedFlowY = torch.sum(WeightMeshY, dim=0)/torch.sum(MeshE, dim=0)
-#         return InterpolatedFlowX, InterpolatedFlowY
-#     if(distMethod == "l2"):
-#         for i in range(len(data2)):
-#             point = [data2[i, 1]-x, data2[i, 0]-y]
-#             w = 1/(point[0]*point[0] + point[1]*point[1]+0.0001)
-#             Wsum += w*dKey[i]
-#             Sum += w
-#         return Wsum/Sum
-#     elif(distMethod == "nn"):
-#         d = torch.zeros((len(data2)), dtype=torch.float64)
-#         numClosest = 4
-#         for i in range(len(data2)):
-#             d[i] = (data2[i, 1]-x)**2 + (data2[i, 0]-y)**2 
-#         idx = np.argpartition(d, numClosest)
-#         kk = idx[:numClosest]
-#         return sum(dKey[kk])/numClosest
-    
 
 def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod="gaussian"):
     
@@ -212,3 +170,4 @@ def Rz(theta):
     return torch.tensor([[ torch.cos(theta), -torch.sin(theta), 0 ],
                    [ torch.sin(theta), torch.cos(theta) , 0 ],
                    [ 0           , 0            , 1 ]], device=DEVICE, dtype=torch.double)
+
