@@ -233,6 +233,12 @@ class Feature2Feature(nn.Module):
             nn.ReLU(),
             nn.Conv2d(in_channels=8, out_channels=3,kernel_size=3, padding=1),
             nn.ReLU(),
+            nn.Conv2d(in_channels=3, out_channels=8,kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=8, out_channels=8,kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=8, out_channels=3,kernel_size=3, padding=1),
+            nn.ReLU(),
         )
         self.id = nn.Identity()
 
