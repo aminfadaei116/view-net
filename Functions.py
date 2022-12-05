@@ -103,10 +103,14 @@ def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod=
 
     # meshx, meshy = torch.meshgrid(d1, d2, indexing='ij') 
     meshy, meshx = torch.meshgrid(d1, d2, indexing='ij')
-    # mx = meshx.clone()
-    # my = meshy.clone()
-    MeshXE = meshx.expand(len(dataRef), 480, 640)
-    MeshYE = meshy.expand(len(dataRef), 480, 640)
+    # In order to prevent wrong behaviour we clone the mesh
+    # reference https://pytorch.org/docs/stable/generated/torch.Tensor.expand.html
+    mx = meshx.clone()
+    my = meshy.clone()
+    del meshx
+    del meshy
+    MeshXE = mx.expand(len(dataRef), height, width)
+    MeshYE = my.expand(len(dataRef), height, width)
 
 
     MeshXE = MeshXE - dataTarg[:, 0].view(-1, 1, 1)
@@ -120,31 +124,36 @@ def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod=
     WeightMeshX = MeshE * flowX.view(-1, 1, 1)
     WeightMeshY = MeshE * flowY.view(-1, 1, 1)
 
-    InterpolatedFlowX = torch.sum(WeightMeshX, dim=0)/torch.sum(MeshE, dim=0)
-    InterpolatedFlowY = torch.sum(WeightMeshY, dim=0)/torch.sum(MeshE, dim=0)
+    MeshXE = torch.reshape(MeshXE, (-1, len(dataRef), height, width))
+    MeshYE = torch.reshape(MeshYE, (-1, len(dataRef), height, width))
 
+    InterpolatedFlowX = torch.sum(WeightMeshX, dim=1)/torch.sum(MeshE, dim=1)
+    InterpolatedFlowY = torch.sum(WeightMeshY, dim=1)/torch.sum(MeshE, dim=1)
+
+    InterpolatedFlowX = torch.nan_to_num(InterpolatedFlowX)
+    InterpolatedFlowY = torch.nan_to_num(InterpolatedFlowY)
+    
     return 2 * InterpolatedFlowX, 2 * InterpolatedFlowY
 
 
 def RenderImage(height, width, refKey, tarKey, img, sd=0.01, eps=1e-10, distMethod="gaussian"):
     X, Y = MyInterpol(height, width, refKey, tarKey, sd, eps, distMethod)
-    d1 = torch.linspace(-1, 1, height)
-    d2 = torch.linspace(-1, 1, width)
-    meshy, meshx = torch.meshgrid(d1, d2, indexing='ij')
-    # meshx, meshy = meshx.to(DEVICE), meshy.to(DEVICE)
+    d1 = torch.linspace(-1, 1, height, device=DEVICE)
+    d2 = torch.linspace(-1, 1, width, device=DEVICE)
+    my, mx = torch.meshgrid(d1, d2, indexing='ij')
 
-    meshx = meshx.clone().detach().to(DEVICE)
-    meshy = meshy.clone().detach().to(DEVICE)
+    meshx = mx.expand(int(len(refKey)/FACE_LANKMARK_LENGTH), height, width)
+    meshy = my.expand(int(len(refKey)/FACE_LANKMARK_LENGTH), height, width)
+    del mx
+    del my
 
     meshx = meshx - X
     meshy = meshy - Y
 
-    grid = torch.stack((meshx, meshy), 2)
-    grid = grid.unsqueeze(0)
-    #img = torch.tensor(img, dtype=torch.float, device=DEVICE)
+    grid = torch.stack((meshx, meshy), 3)
+
     img = img.float().to(DEVICE)
-    img = torch.unsqueeze(img, 0)
-    # grid = torch.tensor(grid, dtype=torch.float)
+
     grid = grid.float()
     output = torch.nn.functional.grid_sample(img, grid, padding_mode="border",align_corners=True)
     return output
@@ -227,7 +236,7 @@ class Feature2Feature(nn.Module):
     def __init__(self, first_layer, last_layer):
         super(Feature2Feature, self).__init__()
         self.layers = nn.Sequential(
-            nn.Conv2d(in_channels=3, out_channels=8,kernel_size=3, padding=1),
+            nn.Conv2d(in_channels=first_layer, out_channels=8,kernel_size=3, padding=1),
             nn.ReLU(),
             nn.Conv2d(in_channels=8, out_channels=8,kernel_size=3, padding=1),
             nn.ReLU(),
@@ -237,7 +246,7 @@ class Feature2Feature(nn.Module):
             nn.ReLU(),
             nn.Conv2d(in_channels=8, out_channels=8,kernel_size=3, padding=1),
             nn.ReLU(),
-            nn.Conv2d(in_channels=8, out_channels=3,kernel_size=3, padding=1),
+            nn.Conv2d(in_channels=8, out_channels=last_layer,kernel_size=3, padding=1),
             nn.ReLU(),
         )
         self.id = nn.Identity()
@@ -248,8 +257,8 @@ class Feature2Feature(nn.Module):
 class ViewNet(nn.Module):
     def __init__(self):
         super(ViewNet, self).__init__()
-        self.Image2Feature = Feature2Feature()
-        self.Feature2Image = Feature2Feature()
+        self.Image2Feature = Feature2Feature(3, 3)
+        self.Feature2Image = Feature2Feature(3, 3)
 
     def forward(self, height, width, refKey, tarKey, x, sd=0.01):
         Features = self.Image2Feature(x)
