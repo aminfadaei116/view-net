@@ -92,8 +92,6 @@ def draw(width, height, refKey, tarKey, size=10, connect=False):
   plt.show()
 
 def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod="gaussian"):
-    
-  
     dKey = dataTarg - dataRef 
 
 
@@ -116,23 +114,30 @@ def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod=
     MeshXE = MeshXE - dataTarg[:, 0].view(-1, 1, 1)
     MeshYE = MeshYE - dataTarg[:, 1].view(-1, 1, 1)
     if distMethod == "gaussian":
-      MeshE = torch.exp(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd))
+        MeshE = torch.exp(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd))
+        C = (MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd)
     elif distMethod == "l2":
-      MeshE = 1/(MeshXE * MeshXE + MeshYE * MeshYE + eps)
+        MeshE = 1/(MeshXE * MeshXE + MeshYE * MeshYE + eps)
     else:
-      print("Distance method not found")
+        print("Distance method not found")
     WeightMeshX = MeshE * flowX.view(-1, 1, 1)
     WeightMeshY = MeshE * flowY.view(-1, 1, 1)
 
-    MeshXE = torch.reshape(MeshXE, (-1, len(dataRef), height, width))
-    MeshYE = torch.reshape(MeshYE, (-1, len(dataRef), height, width))
+    MeshE = torch.reshape(MeshE, (-1, FACE_LANKMARK_LENGTH, height, width))
+
+    MeshXE = torch.reshape(MeshXE, (-1, FACE_LANKMARK_LENGTH, height, width))
+    MeshYE = torch.reshape(MeshYE, (-1, FACE_LANKMARK_LENGTH, height, width))
+
+    WeightMeshX = torch.reshape(WeightMeshX, (-1, FACE_LANKMARK_LENGTH, height, width))
+    WeightMeshY = torch.reshape(WeightMeshY, (-1, FACE_LANKMARK_LENGTH, height, width))
+
 
     InterpolatedFlowX = torch.sum(WeightMeshX, dim=1)/torch.sum(MeshE, dim=1)
     InterpolatedFlowY = torch.sum(WeightMeshY, dim=1)/torch.sum(MeshE, dim=1)
 
     InterpolatedFlowX = torch.nan_to_num(InterpolatedFlowX)
     InterpolatedFlowY = torch.nan_to_num(InterpolatedFlowY)
-    
+
     return 2 * InterpolatedFlowX, 2 * InterpolatedFlowY
 
 
@@ -153,6 +158,7 @@ def RenderImage(height, width, refKey, tarKey, img, sd=0.01, eps=1e-10, distMeth
     grid = torch.stack((meshx, meshy), 3)
 
     img = img.float().to(DEVICE)
+    img = torch.reshape(img, (-1, 3, height, width))
 
     grid = grid.float()
     output = torch.nn.functional.grid_sample(img, grid, padding_mode="border",align_corners=True)
@@ -257,8 +263,8 @@ class Feature2Feature(nn.Module):
 class ViewNet(nn.Module):
     def __init__(self):
         super(ViewNet, self).__init__()
-        self.Image2Feature = Feature2Feature(3, 3)
-        self.Feature2Image = Feature2Feature(3, 3)
+        self.Image2Feature = Feature2Feature(3, 8)
+        self.Feature2Image = Feature2Feature(8, 3)
 
     def forward(self, height, width, refKey, tarKey, x, sd=0.01):
         Features = self.Image2Feature(x)
