@@ -99,7 +99,7 @@ def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod=
     d1 = torch.linspace(0, 1, height, device=DEVICE)
     d2 = torch.linspace(0, 1, width, device=DEVICE)
 
-    # meshx, meshy = torch.meshgrid(d1, d2, indexing='ij') 
+  
     meshy, meshx = torch.meshgrid(d1, d2, indexing='ij')
     # In order to prevent wrong behaviour we clone the mesh
     # reference https://pytorch.org/docs/stable/generated/torch.Tensor.expand.html
@@ -114,8 +114,11 @@ def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod=
     MeshXE = MeshXE - dataTarg[:, 0].view(-1, 1, 1)
     MeshYE = MeshYE - dataTarg[:, 1].view(-1, 1, 1)
     if distMethod == "gaussian":
+        ## check what is happening to C
+        # C = torch.max(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd)
+        # print(C)
         MeshE = torch.exp(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd))
-        C = (MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd)
+
     elif distMethod == "l2":
         MeshE = 1/(MeshXE * MeshXE + MeshYE * MeshYE + eps)
     else:
@@ -141,8 +144,8 @@ def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod=
     return 2 * InterpolatedFlowX, 2 * InterpolatedFlowY
 
 
-def RenderImage(height, width, refKey, tarKey, img, sd=0.01, eps=1e-10, distMethod="gaussian"):
-    X, Y = MyInterpol(height, width, refKey, tarKey, sd, eps, distMethod)
+def RenderImage(height, width, refKey, tarKey, img, sd=0.01, eps=1e-10, distMethod="gaussian", numChannel=3):
+    X, Y= MyInterpol(height, width, refKey, tarKey, sd, eps, distMethod)
     d1 = torch.linspace(-1, 1, height, device=DEVICE)
     d2 = torch.linspace(-1, 1, width, device=DEVICE)
     my, mx = torch.meshgrid(d1, d2, indexing='ij')
@@ -158,7 +161,7 @@ def RenderImage(height, width, refKey, tarKey, img, sd=0.01, eps=1e-10, distMeth
     grid = torch.stack((meshx, meshy), 3)
 
     img = img.float().to(DEVICE)
-    img = torch.reshape(img, (-1, 3, height, width))
+    img = torch.reshape(img, (-1, numChannel, height, width))
 
     grid = grid.float()
     output = torch.nn.functional.grid_sample(img, grid, padding_mode="border",align_corners=True)
@@ -268,7 +271,7 @@ class ViewNet(nn.Module):
 
     def forward(self, height, width, refKey, tarKey, x, sd=0.01):
         Features = self.Image2Feature(x)
-        TransformedFearures = RenderImage(height, width, refKey, tarKey, Features, sd=0.01)
+        TransformedFearures = RenderImage(height, width, refKey, tarKey, Features, sd=0.01, numChannel=8)
         Target = self.Feature2Image(TransformedFearures)
         return Target
         
