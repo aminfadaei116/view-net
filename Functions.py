@@ -115,9 +115,9 @@ def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod=
     MeshYE = MeshYE - dataTarg[:, 1].view(-1, 1, 1)
     if distMethod == "gaussian":
         ## check what is happening to C
-        # C = torch.max(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd)
-        # print(C)
-        MeshE = torch.exp(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd))
+        C = torch.max(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd))
+        print(C)
+        MeshE = torch.exp(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd) - C)
 
     elif distMethod == "l2":
         MeshE = 1/(MeshXE * MeshXE + MeshYE * MeshYE + eps)
