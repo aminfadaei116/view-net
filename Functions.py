@@ -101,39 +101,38 @@ def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod=
 
   
     meshy, meshx = torch.meshgrid(d1, d2, indexing='ij')
+    del d1
+    del d2
     # In order to prevent wrong behaviour we clone the mesh
     # reference https://pytorch.org/docs/stable/generated/torch.Tensor.expand.html
     mx = meshx.clone()
     my = meshy.clone()
     del meshx
     del meshy
-    MeshXE = mx.expand(len(dataRef), height, width)
-    MeshYE = my.expand(len(dataRef), height, width)
 
 
-    MeshXE = MeshXE - dataTarg[:, 0].view(-1, 1, 1)
-    MeshYE = MeshYE - dataTarg[:, 1].view(-1, 1, 1)
+    MeshXE = mx.expand(int(len(dataRef)/FACE_LANKMARK_LENGTH), FACE_LANKMARK_LENGTH, height, width)
+    MeshYE = my.expand(int(len(dataRef)/FACE_LANKMARK_LENGTH), FACE_LANKMARK_LENGTH, height, width)
+
+    del mx
+    del my
+    
+    MeshXE = MeshXE - dataTarg[:, 0].view(-1, FACE_LANKMARK_LENGTH, 1, 1)
+    MeshYE = MeshYE - dataTarg[:, 1].view(-1, FACE_LANKMARK_LENGTH, 1, 1)
+
+
     if distMethod == "gaussian":
-        ## check what is happening to C
-        C = torch.max(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd))
-        print(C)
+        # index 0 is for returning the max value (no need for indices)
+        C = torch.max(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd), 1)[0] 
+        
         MeshE = torch.exp(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd) - C)
 
     elif distMethod == "l2":
         MeshE = 1/(MeshXE * MeshXE + MeshYE * MeshYE + eps)
     else:
         print("Distance method not found")
-    WeightMeshX = MeshE * flowX.view(-1, 1, 1)
-    WeightMeshY = MeshE * flowY.view(-1, 1, 1)
-
-    MeshE = torch.reshape(MeshE, (-1, FACE_LANKMARK_LENGTH, height, width))
-
-    MeshXE = torch.reshape(MeshXE, (-1, FACE_LANKMARK_LENGTH, height, width))
-    MeshYE = torch.reshape(MeshYE, (-1, FACE_LANKMARK_LENGTH, height, width))
-
-    WeightMeshX = torch.reshape(WeightMeshX, (-1, FACE_LANKMARK_LENGTH, height, width))
-    WeightMeshY = torch.reshape(WeightMeshY, (-1, FACE_LANKMARK_LENGTH, height, width))
-
+    WeightMeshX = MeshE * flowX.view(-1, FACE_LANKMARK_LENGTH, 1, 1)
+    WeightMeshY = MeshE * flowY.view(-1, FACE_LANKMARK_LENGTH, 1, 1)
 
     InterpolatedFlowX = torch.sum(WeightMeshX, dim=1)/torch.sum(MeshE, dim=1)
     InterpolatedFlowY = torch.sum(WeightMeshY, dim=1)/torch.sum(MeshE, dim=1)
