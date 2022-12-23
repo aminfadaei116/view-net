@@ -146,26 +146,26 @@ def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod=
 def RenderImage(height, width, refKey, tarKey, img, sd=0.01, eps=1e-10, distMethod="gaussian", numChannel=3):
 
 
+    with torch.no_grad():
+        X, Y= MyInterpol(height, width, refKey, tarKey, sd, eps, distMethod)
+        d1 = torch.linspace(-1, 1, height, device=DEVICE)
+        d2 = torch.linspace(-1, 1, width, device=DEVICE)
+        my, mx = torch.meshgrid(d1, d2, indexing='ij')
 
-    X, Y= MyInterpol(height, width, refKey, tarKey, sd, eps, distMethod)
-    d1 = torch.linspace(-1, 1, height, device=DEVICE)
-    d2 = torch.linspace(-1, 1, width, device=DEVICE)
-    my, mx = torch.meshgrid(d1, d2, indexing='ij')
+        meshx = mx.expand(int(len(refKey)/FACE_LANKMARK_LENGTH), height, width)
+        meshy = my.expand(int(len(refKey)/FACE_LANKMARK_LENGTH), height, width)
+        del mx
+        del my
 
-    meshx = mx.expand(int(len(refKey)/FACE_LANKMARK_LENGTH), height, width)
-    meshy = my.expand(int(len(refKey)/FACE_LANKMARK_LENGTH), height, width)
-    del mx
-    del my
+        meshx = meshx - X
+        meshy = meshy - Y
 
-    meshx = meshx - X
-    meshy = meshy - Y
+        grid = torch.stack((meshx, meshy), 3)
 
-    grid = torch.stack((meshx, meshy), 3)
+        img = img.float().to(DEVICE)
+        img = torch.reshape(img, (-1, numChannel, height, width))
 
-    img = img.float().to(DEVICE)
-    img = torch.reshape(img, (-1, numChannel, height, width))
-
-    grid = grid.float()
+        grid = grid.float()
     output = torch.nn.functional.grid_sample(img, grid, padding_mode="border",align_corners=True)
     return output
 
