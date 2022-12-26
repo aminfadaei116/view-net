@@ -49,7 +49,7 @@ def showImageTensor(img, is3chan=True, isOutput=False, returnOutput=False):
   if isOutput:
     newImg = torch.squeeze(newImg)
 
-  newImg = newImg.to('cpu')  
+  newImg = newImg.to('cpu') 
   if is3chan:
     # plt.imshow((newImg.permute(1, 2, 0)*255).int())
     plt.imshow((newImg.permute(1, 2, 0)))
