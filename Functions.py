@@ -112,7 +112,7 @@ def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod=
 
     MeshXE = mx.expand(int(len(dataRef)/FACE_LANKMARK_LENGTH), FACE_LANKMARK_LENGTH, height, width)
     MeshYE = my.expand(int(len(dataRef)/FACE_LANKMARK_LENGTH), FACE_LANKMARK_LENGTH, height, width)
-    del mx
+    del mxd
     del my
     
     MeshXE = MeshXE - dataTarg[:, 0].view(-1, FACE_LANKMARK_LENGTH, 1, 1)
