@@ -4,7 +4,7 @@ Created on Wed Aug 17 10:49:28 2022
 
 This script contains the functions of our model
 
-@author: afadaei
+@author: Amin Fadaeinejad
 """
 import numpy as np
 from numpy import save
@@ -91,81 +91,6 @@ def draw(width, height, refKey, tarKey, size=10, connect=False):
   plt.gca().invert_yaxis()
   plt.show()
 
-def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod="gaussian"):
-
-
-    dKey = dataTarg - dataRef 
-
-    flowX, flowY = dKey[:,0], dKey[:,1]
-    d1 = torch.linspace(0, 1, height, device=DEVICE)
-    d2 = torch.linspace(0, 1, width, device=DEVICE)
-  
-    meshy, meshx = torch.meshgrid(d1, d2, indexing='ij')
-    del d1
-    del d2
-    # In order to prevent wrong behaviour we clone the mesh
-    # reference https://pytorch.org/docs/stable/generated/torch.Tensor.expand.html
-    mx = meshx.clone()
-    my = meshy.clone()
-    del meshx
-    del meshy
-
-    MeshXE = mx.expand(int(len(dataRef)/FACE_LANKMARK_LENGTH), FACE_LANKMARK_LENGTH, height, width)
-    MeshYE = my.expand(int(len(dataRef)/FACE_LANKMARK_LENGTH), FACE_LANKMARK_LENGTH, height, width)
-    del mx
-    del my
-    
-    MeshXE = MeshXE - dataTarg[:, 0].view(-1, FACE_LANKMARK_LENGTH, 1, 1)
-    MeshYE = MeshYE - dataTarg[:, 1].view(-1, FACE_LANKMARK_LENGTH, 1, 1)
-
-
-    if distMethod == "gaussian":
-        # index 0 is for returning the max value (no need for indices)
-        C = torch.max(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd), 1)[0]       
-        MeshE = torch.exp(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd) - C)
-    elif distMethod == "l2":
-        MeshE = 1/(MeshXE * MeshXE + MeshYE * MeshYE + eps)
-    else:
-        print("Distance method not found")
-
-    WeightMeshX = MeshE * flowX.view(-1, FACE_LANKMARK_LENGTH, 1, 1)
-    WeightMeshY = MeshE * flowY.view(-1, FACE_LANKMARK_LENGTH, 1, 1)
-
-    InterpolatedFlowX = torch.sum(WeightMeshX, dim=1)/torch.sum(MeshE, dim=1)
-    InterpolatedFlowY = torch.sum(WeightMeshY, dim=1)/torch.sum(MeshE, dim=1)
-
-    InterpolatedFlowX = torch.nan_to_num(InterpolatedFlowX)
-    InterpolatedFlowY = torch.nan_to_num(InterpolatedFlowY)
-
-    return 2 * InterpolatedFlowX, 2 * InterpolatedFlowY
-
-
-def RenderImage(height, width, refKey, tarKey, img, sd=0.01, eps=1e-10, distMethod="gaussian", numChannel=3):
-
-
-    with torch.no_grad():
-        X, Y= MyInterpol(height, width, refKey, tarKey, sd, eps, distMethod)
-        d1 = torch.linspace(-1, 1, height, device=DEVICE)
-        d2 = torch.linspace(-1, 1, width, device=DEVICE)
-        my, mx = torch.meshgrid(d1, d2, indexing='ij')
-
-        meshx = mx.expand(int(len(refKey)/FACE_LANKMARK_LENGTH), height, width)
-        meshy = my.expand(int(len(refKey)/FACE_LANKMARK_LENGTH), height, width)
-        del mx
-        del my
-
-        meshx = meshx - X
-        meshy = meshy - Y
-
-        grid = torch.stack((meshx, meshy), 3)
-
-        img = img.float().to(DEVICE)
-        img = torch.reshape(img, (-1, numChannel, height, width))
-
-        grid = grid.float()
-    output = torch.nn.functional.grid_sample(img, grid, padding_mode="border",align_corners=True)
-    return output
-
 
 def TransformKeys(keys, euler, T):
     R = torch.linalg.multi_dot((Rx(euler[0]), Ry(euler[1]), Rz(euler[2])))
@@ -188,56 +113,6 @@ def Rz(theta):
     return torch.tensor([[ torch.cos(theta), -torch.sin(theta), 0 ],
                    [ torch.sin(theta), torch.cos(theta) , 0 ],
                    [ 0           , 0            , 1 ]], device=DEVICE, dtype=torch.double)
-
-def UseWebcam():
-  # For webcam input:
-  cap = cv2.VideoCapture(0)
-  with mp_face_mesh.FaceMesh(
-      max_num_faces=1,
-      refine_landmarks=True,
-      min_detection_confidence=0.5,
-      min_tracking_confidence=0.5) as face_mesh:
-    while cap.isOpened():
-      success, image = cap.read()
-      if not success:
-        print("Ignoring empty camera frame.")
-        # If loading a video, use 'break' instead of 'continue'.
-        continue
-
-      # To improve performance, optionally mark the image as not writeable to
-      # pass by reference.
-      image.flags.writeable = False
-      image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-      results = face_mesh.process(image)
-
-      # Draw the face mesh annotations on the image.
-      image.flags.writeable = True
-      # image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-      if results.multi_face_landmarks:
-        LandMarks = np.zeros((FACE_LANKMARK_LENGTH, 3))
-        for i, land in enumerate(results.multi_face_landmarks[0].landmark):
-    
-          LandMarks[i] = [land.x, land.y, land.z]
-        
-        landTen = torch.tensor(LandMarks, device=DEVICE)
-        ##
-        output = RenderImage(height, width, refKey, landTen, imgRef, sd=0.01)
-
-        dummy = torch.squeeze(output)
-        # dummy = createMask(landTen, height, width, dummy).int()
-        image =  (dummy.cpu().permute(1, 2, 0).numpy()).astype(np.uint8)
-        #img = showImageTensor(dummy, is3chan=True, isOutput=True, returnOutput=True)
-  # showImageTensor(output.int(), is3chan=True, isOutput=True)
-  # showImageTensor(output, isOutput=True)
-
-
-        # cv2.imshow('MediaPipe Face Mesh', cv2.flip(image, 1))
-      image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-      cv2.imshow('MediaPipe Face Mesh', image)
-      if cv2.waitKey(5) & 0xFF == ord('q'):
-        break
-  cap.release()
-  cv2.destroyAllWindows()
 
 
 class Feature2Feature(nn.Module):

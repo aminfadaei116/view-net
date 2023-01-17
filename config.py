@@ -4,22 +4,21 @@ Created on Wed Aug 17 10:55:15 2022
 
 This script contains the hyper parameters of our model
 
-@author: afadaei
+@author: Amin Fadaeinejad
 """
 
 import torch
 import mediapipe as mp
 
-PathNPY1 = r"C:\Users\afadaeinejad\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.npy"
-PathNPY2 = r"C:\Users\afadaeinejad\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.npy"
+PathNPY1 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.npy"
+PathNPY2 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.npy"
 
-PathImg1 = r"C:\Users\afadaeinejad\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.jpg"
-PathImg2 = r"C:\Users\afadaeinejad\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.jpg"
+PathImg1 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.jpg"
+PathImg2 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.jpg"
 
-path = r'C:\Users\afadaeinejad\Documents\GitHub\ViewGen\FaceData\Person_7'
+path = r'C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_7'
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-# DEVICE = torch.device('cpu')
 
 
 mp_drawing = mp.solutions.drawing_utils
