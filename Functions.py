@@ -92,9 +92,6 @@ def draw(width, height, refKey, tarKey, size=10, connect=False):
   plt.show()
 
 def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod="gaussian"):
-  
-
-
 
 
     dKey = dataTarg - dataRef 
