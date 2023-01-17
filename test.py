@@ -12,15 +12,16 @@ import math as m
 import matplotlib.pyplot as plt
 import torch.nn as nn
 import torch.nn.functional as F
-from config import *
+import config
 import cv2
 from image2image import RenderImage
+import torch
 
 
-def UseWebcam():
+def UseWebcam(height, width, refKey, imgRef):
   # For webcam input:
   cap = cv2.VideoCapture(0)
-  with mp_face_mesh.FaceMesh(
+  with config.mp_face_mesh.FaceMesh(
       max_num_faces=1,
       refine_landmarks=True,
       min_detection_confidence=0.5,
@@ -42,12 +43,12 @@ def UseWebcam():
       image.flags.writeable = True
       # image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
       if results.multi_face_landmarks:
-        LandMarks = np.zeros((FACE_LANKMARK_LENGTH, 3))
+        LandMarks = np.zeros((config.FACE_LANKMARK_LENGTH, 3))
         for i, land in enumerate(results.multi_face_landmarks[0].landmark):
     
           LandMarks[i] = [land.x, land.y, land.z]
         
-        landTen = torch.tensor(LandMarks, device=DEVICE)
+        landTen = torch.tensor(LandMarks, device=config.DEVICE)
         ##
         output = RenderImage(height, width, refKey, landTen, imgRef, sd=0.01)
 

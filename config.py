@@ -27,6 +27,7 @@ mp_face_mesh = mp.solutions.face_mesh
 NUM_CHANNALS = 3
 FACE_LANKMARK_LENGTH = 478
 NUMBER_COORDINATE = 3
-
+LOAD_MODEL = False
+LEARNING_RATE = 0.001
 
 pi = 3.14159265359
