@@ -5,14 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7db84522-1b46-48ad-b5cd-0749d0c4ed3b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/View-Net.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/View-Net.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewNet notbook.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/ViewNet notbook.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rotation-X2.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/rotation-X2.mp4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -30,7 +36,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/afadaeinejad/Documents/Amin/Ubisoft/Projects/FaceForge/Code",
+    "last_opened_file_path": "C:/Users/afadaeinejad/OneDrive - Ubisoft/Documents/GitHub/View-Net",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -62,6 +68,26 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="face2face" type="PythonConfigurationType" factoryName="Python">
+      <module name="View-Net" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\Users\afadaeinejad\Anaconda3\envs\faceforge\python.exe" />
+      <option name="SDK_NAME" value="Python 3.8 (faceforge)" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/face2face.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -77,6 +103,9 @@
       <workItem from="1673478399998" duration="405000" />
       <workItem from="1673880190208" duration="3053000" />
       <workItem from="1673890234725" duration="601000" />
+      <workItem from="1674144013722" duration="793000" />
+      <workItem from="1674144825912" duration="23000" />
+      <workItem from="1674144909593" duration="498000" />
     </task>
     <servers />
   </component>
