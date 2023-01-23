@@ -12,9 +12,9 @@ import math as m
 import matplotlib.pyplot as plt
 import torch.nn as nn
 import torch.nn.functional as F
-import config
+import configs.config as config
 import cv2
-from image2image import RenderImage
+from models.image2image import RenderImage
 import torch
 
 

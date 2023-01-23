@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import torch.nn as nn
 import torch.nn.functional as F
 import torch
-import config
+import configs.config as config
 import cv2
 
 

@@ -1,4 +1,3 @@
-import cv2
 import numpy as np
 import mediapipe as mp
 from numpy import save
@@ -19,18 +18,18 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torchvision
 from torch.linalg import multi_dot
-import config
-from utils import *
+import configs.config as config
+from utils.util import *
 from matplotlib import cm
 from torch.utils.data import Dataset
 from torchvision import datasets
 from torchvision.transforms import ToTensor
 import torch.optim as optim
-from image2image import RenderImage
-from test import UseWebcam
-from generator_model import GeneratorUNet
-from discriminator_model import Discriminator
-from dataset import ImageDataset
+from models.image2image import RenderImage
+from utils.test import UseWebcam
+from models.generator_model import GeneratorUNet
+from models.discriminator_model import Discriminator
+from data.dataset import ImageDataset
 
 
 def main():
@@ -42,7 +41,7 @@ def main():
 
     height, width = imgRef.shape[1], imgRef.shape[2]
     print(config.DEVICE)
-    
+
     UseWebcam(height, width, refKey, imgRef)
 
 
