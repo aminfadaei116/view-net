@@ -11,47 +11,48 @@ import torch
 import mediapipe as mp
 
 
+class Config:
 
-PathNPY1 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.npy"
-PathNPY2 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.npy"
+    def __init__(self):
+        self.PathNPY1 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.npy"
+        self.PathNPY2 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.npy"
 
-PathImg1 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.jpg"
-PathImg2 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.jpg"
+        self.PathImg1 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.jpg"
+        self.PathImg2 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.jpg"
 
-path = r'C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_7'
+        self.path = r'C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_7'
 
-####
+        ####
 
-# PathNPY1 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.npy"
-# PathNPY2 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.npy"
+        # self.PathNPY1 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.npy"
+        # self.PathNPY2 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.npy"
 
-# PathImg1 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.jpg"
-# PathImg2 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.jpg"
+        # self.PathImg1 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.jpg"
+        # self.PathImg2 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.jpg"
 
-# path = r'C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_7'
+        # self.path = r'C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_7'
 
-## This part is for the second compyter location
-
-
-# PathNPY1 = r"C:\Users\afadaeinejad\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.npy"
-# PathNPY2 = r"C:\Users\afadaeinejad\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.npy"
-
-# PathImg1 = r"C:\Users\afadaeinejad\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.jpg"
-# PathImg2 = r"C:\Users\afadaeinejad\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.jpg"
+        ## This part is for the second compyter location
 
 
-# path = r'C:\Users\afadaeinejad\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_7'
+        # self.PathNPY1 = r"C:\Users\afadaeinejad\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.npy"
+        # self.PathNPY2 = r"C:\Users\afadaeinejad\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.npy"
 
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        # self.PathImg1 = r"C:\Users\afadaeinejad\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.jpg"
+        # self.PathImg2 = r"C:\Users\afadaeinejad\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.jpg"
 
 
-mp_drawing = mp.solutions.drawing_utils
-mp_drawing_styles = mp.solutions.drawing_styles
-mp_face_mesh = mp.solutions.face_mesh
-NUM_CHANNALS = 3
-FACE_LANKMARK_LENGTH = 478
-NUMBER_COORDINATE = 3
-LOAD_MODEL = False
-LEARNING_RATE = 0.001
+        # self.path = r'C:\Users\afadaeinejad\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_7'
 
-pi = 3.14159265359
+        self.DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+        self.mp_drawing = mp.solutions.drawing_utils
+        self.mp_drawing_styles = mp.solutions.drawing_styles
+        self.mp_face_mesh = mp.solutions.face_mesh
+        self.NUM_CHANNALS = 3
+        self.FACE_LANKMARK_LENGTH = 478
+        self.NUMBER_COORDINATE = 3
+        self.LOAD_MODEL = False
+        self.LEARNING_RATE = 0.001
+        self.pi = 3.14159265359
