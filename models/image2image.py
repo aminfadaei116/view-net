@@ -8,6 +8,8 @@ This script contains the functions of our model
 """
 
 import torch
+# import configs.config as config
+
 import configs.config as config
 
 def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod="gaussian"):
