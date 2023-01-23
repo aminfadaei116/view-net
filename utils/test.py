@@ -12,13 +12,12 @@ import math as m
 import matplotlib.pyplot as plt
 import torch.nn as nn
 import torch.nn.functional as F
-import configs.config as config
 import cv2
 from models.image2image import RenderImage
 import torch
 
 
-def UseWebcam(height, width, refKey, imgRef):
+def UseWebcam(config, height, width, refKey, imgRef):
   # For webcam input:
   cap = cv2.VideoCapture(0)
   with config.mp_face_mesh.FaceMesh(
@@ -51,7 +50,7 @@ def UseWebcam(height, width, refKey, imgRef):
         landTen = torch.tensor(LandMarks, device=config.DEVICE, requires_grad = False)
         ##
         with torch.no_grad():
-          output = RenderImage(height, width, refKey, landTen, imgRef, sd=0.01)
+          output = RenderImage(config, height, width, refKey, landTen, imgRef, sd=0.01)
 
         dummy = torch.squeeze(output)
         # dummy = createMask(landTen, height, width, dummy).int()

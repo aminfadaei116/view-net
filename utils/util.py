@@ -12,7 +12,7 @@ import math as m
 import matplotlib.pyplot as plt
 import torch.nn as nn
 import torch.nn.functional as F
-import configs.config as config
+# from configs.config import Config
 import torch
 import cv2
 
@@ -26,7 +26,7 @@ def weights_init_normal(m):
         torch.nn.init.constant_(m.bias.data, 0.0)
         
 
-def createMask(keys, height, width, img=None):
+def createMask(config, keys, height, width, img=None):
     
     if img != None:
       newImg = img.clone().detach().to(config.DEVICE)
@@ -38,7 +38,7 @@ def createMask(keys, height, width, img=None):
       return mask
 
 
-def createMask2(keys, height, width, img=None):
+def createMask2(config, keys, height, width, img=None):
     
     if img != None:
       newImg = img.clone().detach().to(config.DEVICE)
@@ -108,17 +108,17 @@ def TransformKeys(keys, euler, T):
     out = torch.matmul(keys, R)
     return out + center + T
     
-def Rx(theta):
+def Rx(config, theta):
     return torch.tensor([[ 1, 0           , 0           ],
                    [ 0, torch.cos(theta),-torch.sin(theta)],
                    [ 0, torch.sin(theta), torch.cos(theta)]], device=config.DEVICE, dtype=torch.double)
   
-def Ry(theta):
+def Ry(config, theta):
     return torch.tensor([[ torch.cos(theta), 0, torch.sin(theta)],
                    [ 0           , 1, 0           ],
                    [-torch.sin(theta), 0, torch.cos(theta)]], device=config.DEVICE, dtype=torch.double)
   
-def Rz(theta):
+def Rz(config, theta):
     return torch.tensor([[ torch.cos(theta), -torch.sin(theta), 0 ],
                    [ torch.sin(theta), torch.cos(theta) , 0 ],
                    [ 0           , 0            , 1 ]], device=config.DEVICE, dtype=torch.double)

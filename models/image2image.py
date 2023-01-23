@@ -10,9 +10,8 @@ This script contains the functions of our model
 import torch
 # import configs.config as config
 
-import configs.config as config
 
-def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod="gaussian"):
+def MyInterpol(config, height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod="gaussian"):
 
 
     dKey = dataTarg - dataRef 
@@ -39,7 +38,6 @@ def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod=
     MeshXE = MeshXE - dataTarg[:, 0].view(-1, config.FACE_LANKMARK_LENGTH, 1, 1)
     MeshYE = MeshYE - dataTarg[:, 1].view(-1, config.FACE_LANKMARK_LENGTH, 1, 1)
 
-    print(MeshYE.requires_grad)
     if distMethod == "gaussian":
         # index 0 is for returning the max value (no need for indices)
         C = torch.max(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd), 1)[0]       
@@ -61,11 +59,11 @@ def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod=
     return 2 * InterpolatedFlowX, 2 * InterpolatedFlowY
 
 
-def RenderImage(height, width, refKey, tarKey, img, sd=0.01, eps=1e-10, distMethod="gaussian", numChannel=3):
+def RenderImage(config, height, width, refKey, tarKey, img, sd=0.01, eps=1e-10, distMethod="gaussian", numChannel=3):
 
 
     with torch.no_grad():
-        X, Y= MyInterpol(height, width, refKey, tarKey, sd, eps, distMethod)
+        X, Y= MyInterpol(config, height, width, refKey, tarKey, sd, eps, distMethod)
         d1 = torch.linspace(-1, 1, height, device=config.DEVICE)
         d2 = torch.linspace(-1, 1, width, device=config.DEVICE)
         my, mx = torch.meshgrid(d1, d2, indexing='ij')

@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 import torchvision
-import configs.config as config
+from configs.config import Config
 from utils.util import *
 from utils.test import UseWebcam
 from models.generator_model import GeneratorUNet
@@ -10,6 +10,8 @@ from data.face2face_dataset import ImageDataset
 
 
 def main():
+
+    config = Config("YorkU")
     imgRef = torchvision.io.read_image(config.PathImg1)
     # imgTar = torchvision.io.read_image(config.PathImg2)
 
@@ -17,9 +19,9 @@ def main():
     # tarKey = torch.tensor(np.load(config.PathNPY2), device=config.DEVICE)
 
     height, width = imgRef.shape[1], imgRef.shape[2]
-    print(config.DEVICE)
+    print("We are using the: ", config.DEVICE)
 
-    UseWebcam(height, width, refKey, imgRef)
+    UseWebcam(config, height, width, refKey, imgRef)
 
 
 if __name__ == "__main__":

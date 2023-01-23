@@ -13,14 +13,41 @@ import mediapipe as mp
 
 class Config:
 
-    def __init__(self):
-        self.PathNPY1 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.npy"
-        self.PathNPY2 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.npy"
+    def __init__(self, system):
+        if system == "Ubisoft":
+            username = "afadaeinejad/OneDrive - Ubisoft"
+        elif system == "YorkU":
+            username = "afadaei"
+        elif system == "laptop":
+            username = "Amin"
 
-        self.PathImg1 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.jpg"
-        self.PathImg2 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.jpg"
+        PathNPY1 = f"C:/Users/{username}/OneDrive - Ubisoft/Documents/GitHub"
+        self.PathNPY1 = f"C:/Users/{username}/Documents/GitHub/ViewGen/FaceData/Person_2/Image_120.npy"
+        self.PathNPY2 = f"C:/Users/{username}/Documents/GitHub/ViewGen/FaceData/Person_2/Image_34.npy"
 
-        self.path = r'C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_7'
+        self.PathImg1 = f"C:/Users/{username}/Documents/GitHub/ViewGen/FaceData/Person_2/Image_120.jpg"
+        self.PathImg2 = f"C:/Users/{username}/Documents/GitHub/ViewGen/FaceData/Person_2/Image_34.jpg"
+
+        self.path = f'C:/Users/{username}/Documents/GitHub/ViewGen/FaceData/Person_7'
+
+        # self.PathNPY2 = f"C:\Users\{username}\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.npy"
+
+        # self.PathImg1 = f"C:\Users\{username}\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.jpg"
+        # self.PathImg2 = f"C:\Users\{username}\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.jpg"
+
+
+        # self.path = f'C:\Users\{username}\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_7'
+
+
+
+
+        # self.PathNPY1 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.npy"
+        # self.PathNPY2 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.npy"
+
+        # self.PathImg1 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.jpg"
+        # self.PathImg2 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.jpg"
+
+        # self.path = r'C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_7'
 
         ####
 
@@ -45,8 +72,6 @@ class Config:
         # self.path = r'C:\Users\afadaeinejad\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_7'
 
         self.DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-
         self.mp_drawing = mp.solutions.drawing_utils
         self.mp_drawing_styles = mp.solutions.drawing_styles
         self.mp_face_mesh = mp.solutions.face_mesh
