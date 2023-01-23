@@ -12,7 +12,8 @@ import math as m
 import matplotlib.pyplot as plt
 import torch.nn as nn
 import torch.nn.functional as F
-from configs.config import *
+import configs.config as config
+import torch
 import cv2
 
 
@@ -28,11 +29,11 @@ def weights_init_normal(m):
 def createMask(keys, height, width, img=None):
     
     if img != None:
-      newImg = img.clone().detach().to(DEVICE)
+      newImg = img.clone().detach().to(config.DEVICE)
       newImg[:, (height*keys[:, 1]).long(), (width*keys[:, 0]).long()] = 255.0
       return newImg
     else: 
-      mask = torch.zeros((height, width), device=DEVICE)
+      mask = torch.zeros((height, width), device=config.DEVICE)
       mask[(height*keys[:, 1]).long(), (width*keys[:, 0]).long()] = 1
       return mask
 
@@ -40,13 +41,13 @@ def createMask(keys, height, width, img=None):
 def createMask2(keys, height, width, img=None):
     
     if img != None:
-      newImg = img.clone().detach().to(DEVICE)
+      newImg = img.clone().detach().to(config.DEVICE)
       for i in range(-1, 2):
         for j in range(-1, 2):
           newImg[:, (height*keys[:, 1]).long()+i, (width*keys[:, 0]).long()+j] = 255.0
       return newImg
     else: 
-      mask = torch.zeros((height, width), device=DEVICE)
+      mask = torch.zeros((height, width), device=config.DEVICE)
       for i in range(-1, 2):
         for j in range(-1, 2):
           mask[(height*keys[:, 1]).long()+i, (width*keys[:, 0]).long()+j] = 1
@@ -110,49 +111,49 @@ def TransformKeys(keys, euler, T):
 def Rx(theta):
     return torch.tensor([[ 1, 0           , 0           ],
                    [ 0, torch.cos(theta),-torch.sin(theta)],
-                   [ 0, torch.sin(theta), torch.cos(theta)]], device=DEVICE, dtype=torch.double)
+                   [ 0, torch.sin(theta), torch.cos(theta)]], device=config.DEVICE, dtype=torch.double)
   
 def Ry(theta):
     return torch.tensor([[ torch.cos(theta), 0, torch.sin(theta)],
                    [ 0           , 1, 0           ],
-                   [-torch.sin(theta), 0, torch.cos(theta)]], device=DEVICE, dtype=torch.double)
+                   [-torch.sin(theta), 0, torch.cos(theta)]], device=config.DEVICE, dtype=torch.double)
   
 def Rz(theta):
     return torch.tensor([[ torch.cos(theta), -torch.sin(theta), 0 ],
                    [ torch.sin(theta), torch.cos(theta) , 0 ],
-                   [ 0           , 0            , 1 ]], device=DEVICE, dtype=torch.double)
+                   [ 0           , 0            , 1 ]], device=config.DEVICE, dtype=torch.double)
 
 
-class Feature2Feature(nn.Module):
-    def __init__(self, first_layer, last_layer):
-        super(Feature2Feature, self).__init__()
-        self.layers = nn.Sequential(
-            nn.Conv2d(in_channels=first_layer, out_channels=8,kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.Conv2d(in_channels=8, out_channels=8,kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.Conv2d(in_channels=8, out_channels=8,kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.Conv2d(in_channels=8, out_channels=8,kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.Conv2d(in_channels=8, out_channels=8,kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.Conv2d(in_channels=8, out_channels=last_layer,kernel_size=3, padding=1),
-        )
-        self.id = nn.Identity()
+# class Feature2Feature(nn.Module):
+#     def __init__(self, first_layer, last_layer):
+#         super(Feature2Feature, self).__init__()
+#         self.layers = nn.Sequential(
+#             nn.Conv2d(in_channels=first_layer, out_channels=8,kernel_size=3, padding=1),
+#             nn.ReLU(),
+#             nn.Conv2d(in_channels=8, out_channels=8,kernel_size=3, padding=1),
+#             nn.ReLU(),
+#             nn.Conv2d(in_channels=8, out_channels=8,kernel_size=3, padding=1),
+#             nn.ReLU(),
+#             nn.Conv2d(in_channels=8, out_channels=8,kernel_size=3, padding=1),
+#             nn.ReLU(),
+#             nn.Conv2d(in_channels=8, out_channels=8,kernel_size=3, padding=1),
+#             nn.ReLU(),
+#             nn.Conv2d(in_channels=8, out_channels=last_layer,kernel_size=3, padding=1),
+#         )
+#         self.id = nn.Identity()
 
-    def forward(self, x):
-        return self.layers(x)
+#     def forward(self, x):
+#         return self.layers(x)
 
-class ViewNet(nn.Module):
-    def __init__(self):
-        super(ViewNet, self).__init__()
-        self.Image2Feature = Feature2Feature(3, 8)
-        self.Feature2Image = Feature2Feature(8, 3)
+# class ViewNet(nn.Module):
+#     def __init__(self):
+#         super(ViewNet, self).__init__()
+#         self.Image2Feature = Feature2Feature(3, 8)
+#         self.Feature2Image = Feature2Feature(8, 3)
 
-    def forward(self, height, width, refKey, tarKey, x, sd=0.01):
-        Features = self.Image2Feature(x)
-        TransformedFearures = RenderImage(height, width, refKey, tarKey, Features, sd=0.01, numChannel=8)
-        Target = self.Feature2Image(TransformedFearures)
-        return Target
+#     def forward(self, height, width, refKey, tarKey, x, sd=0.01):
+#         Features = self.Image2Feature(x)
+#         TransformedFearures = RenderImage(height, width, refKey, tarKey, Features, sd=0.01, numChannel=8)
+#         Target = self.Feature2Image(TransformedFearures)
+#         return Target
         
