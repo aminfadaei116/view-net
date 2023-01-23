@@ -48,9 +48,10 @@ def UseWebcam(height, width, refKey, imgRef):
     
           LandMarks[i] = [land.x, land.y, land.z]
         
-        landTen = torch.tensor(LandMarks, device=config.DEVICE)
+        landTen = torch.tensor(LandMarks, device=config.DEVICE, requires_grad = False)
         ##
-        output = RenderImage(height, width, refKey, landTen, imgRef, sd=0.01)
+        with torch.no_grad():
+          output = RenderImage(height, width, refKey, landTen, imgRef, sd=0.01)
 
         dummy = torch.squeeze(output)
         # dummy = createMask(landTen, height, width, dummy).int()

@@ -6,15 +6,15 @@ from utils.util import *
 from utils.test import UseWebcam
 from models.generator_model import GeneratorUNet
 from models.discriminator_model import Discriminator
-from data.dataset import ImageDataset
+from data.face2face_dataset import ImageDataset
 
 
 def main():
     imgRef = torchvision.io.read_image(config.PathImg1)
-    imgTar = torchvision.io.read_image(config.PathImg2)
+    # imgTar = torchvision.io.read_image(config.PathImg2)
 
     refKey = torch.tensor(np.load(config.PathNPY1), device=config.DEVICE)
-    tarKey = torch.tensor(np.load(config.PathNPY2), device=config.DEVICE)
+    # tarKey = torch.tensor(np.load(config.PathNPY2), device=config.DEVICE)
 
     height, width = imgRef.shape[1], imgRef.shape[2]
     print(config.DEVICE)

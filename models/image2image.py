@@ -37,7 +37,7 @@ def MyInterpol(height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod=
     MeshXE = MeshXE - dataTarg[:, 0].view(-1, config.FACE_LANKMARK_LENGTH, 1, 1)
     MeshYE = MeshYE - dataTarg[:, 1].view(-1, config.FACE_LANKMARK_LENGTH, 1, 1)
 
-
+    print(MeshYE.requires_grad)
     if distMethod == "gaussian":
         # index 0 is for returning the max value (no need for indices)
         C = torch.max(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd), 1)[0]       

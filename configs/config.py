@@ -10,13 +10,25 @@ This script contains the hyper parameters of our model
 import torch
 import mediapipe as mp
 
-PathNPY1 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.npy"
-PathNPY2 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.npy"
 
-PathImg1 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.jpg"
-PathImg2 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.jpg"
 
-path = r'C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_7'
+PathNPY1 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.npy"
+PathNPY2 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.npy"
+
+PathImg1 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.jpg"
+PathImg2 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.jpg"
+
+path = r'C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_7'
+
+####
+
+# PathNPY1 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.npy"
+# PathNPY2 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.npy"
+
+# PathImg1 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.jpg"
+# PathImg2 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.jpg"
+
+# path = r'C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_7'
 
 ## This part is for the second compyter location
 
