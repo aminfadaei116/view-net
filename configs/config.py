@@ -30,47 +30,6 @@ class Config:
 
         self.path = f'C:/Users/{username}/Documents/GitHub/ViewGen/FaceData/Person_7'
 
-        # self.PathNPY2 = f"C:\Users\{username}\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.npy"
-
-        # self.PathImg1 = f"C:\Users\{username}\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.jpg"
-        # self.PathImg2 = f"C:\Users\{username}\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.jpg"
-
-
-        # self.path = f'C:\Users\{username}\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_7'
-
-
-
-
-        # self.PathNPY1 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.npy"
-        # self.PathNPY2 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.npy"
-
-        # self.PathImg1 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.jpg"
-        # self.PathImg2 = r"C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.jpg"
-
-        # self.path = r'C:\Users\Amin\Documents\GitHub\ViewGen\FaceData\Person_7'
-
-        ####
-
-        # self.PathNPY1 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.npy"
-        # self.PathNPY2 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.npy"
-
-        # self.PathImg1 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.jpg"
-        # self.PathImg2 = r"C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.jpg"
-
-        # self.path = r'C:\Users\afadaei\Documents\GitHub\ViewGen\FaceData\Person_7'
-
-        ## This part is for the second compyter location
-
-
-        # self.PathNPY1 = r"C:\Users\afadaeinejad\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.npy"
-        # self.PathNPY2 = r"C:\Users\afadaeinejad\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.npy"
-
-        # self.PathImg1 = r"C:\Users\afadaeinejad\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_2\Image_120.jpg"
-        # self.PathImg2 = r"C:\Users\afadaeinejad\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_2\Image_34.jpg"
-
-
-        # self.path = r'C:\Users\afadaeinejad\OneDrive - Ubisoft\Documents\GitHub\ViewGen\FaceData\Person_7'
-
         self.DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.mp_drawing = mp.solutions.drawing_utils
         self.mp_drawing_styles = mp.solutions.drawing_styles
