@@ -14,6 +14,13 @@ import torchvision.transforms as transforms
 
 
 class ImageDataset(Dataset):
+    """"
+    This dataset class contains images from two domain
+    Domain A: The source image after warp
+    Domain B: The ground truth
+    """
+
+
     def __init__(self, root, transforms_=None, mode="train"):
         self.transform = transforms.Compose(transforms_)
 
