@@ -27,6 +27,8 @@ def UseWebcam(config, height, width, refKey, imgRef):
       min_tracking_confidence=0.5) as face_mesh:
     while cap.isOpened():
       success, image = cap.read()
+      if config.system == "Ubisoft":
+        image = cv2.flip(image, 1)
       if not success:
         print("Ignoring empty camera frame.")
         # If loading a video, use 'break' instead of 'continue'.
@@ -62,6 +64,7 @@ def UseWebcam(config, height, width, refKey, imgRef):
 
         # cv2.imshow('MediaPipe Face Mesh', cv2.flip(image, 1))
       image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
       cv2.imshow('MediaPipe Face Mesh', image)
       if cv2.waitKey(5) & 0xFF == ord('q'):
         break

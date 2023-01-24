@@ -17,7 +17,7 @@ from utils.test import UseWebcam
 
 def main():
 
-    config = Config("YorkU")
+    config = Config("Ubisoft")
     imgRef = torchvision.io.read_image(config.PathImg1)
     # imgTar = torchvision.io.read_image(config.PathImg2)
 

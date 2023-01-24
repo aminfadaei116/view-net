@@ -14,11 +14,12 @@ import mediapipe as mp
 class Config:
 
     def __init__(self, system):
-        if system == "Ubisoft":
+        self.system = system
+        if self.system == "Ubisoft":
             username = "afadaeinejad/OneDrive - Ubisoft"
-        elif system == "YorkU":
+        elif self.system == "YorkU":
             username = "afadaei"
-        elif system == "laptop":
+        elif self.system == "laptop":
             username = "Amin"
 
         PathNPY1 = f"C:/Users/{username}/OneDrive - Ubisoft/Documents/GitHub"
