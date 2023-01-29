@@ -22,7 +22,6 @@ class Config:
         elif self.system == "laptop":
             username = "Amin"
 
-        PathNPY1 = f"C:/Users/{username}/OneDrive - Ubisoft/Documents/GitHub"
         self.PathNPY1 = f"C:/Users/{username}/Documents/GitHub/view-gen/FaceData/Person_2/Image_120.npy"
         self.PathNPY2 = f"C:/Users/{username}/Documents/GitHub/view-gen/FaceData/Person_2/Image_34.npy"
 
