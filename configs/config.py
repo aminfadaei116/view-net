@@ -23,13 +23,13 @@ class Config:
             username = "Amin"
 
         PathNPY1 = f"C:/Users/{username}/OneDrive - Ubisoft/Documents/GitHub"
-        self.PathNPY1 = f"C:/Users/{username}/Documents/GitHub/ViewGen/FaceData/Person_2/Image_120.npy"
-        self.PathNPY2 = f"C:/Users/{username}/Documents/GitHub/ViewGen/FaceData/Person_2/Image_34.npy"
+        self.PathNPY1 = f"C:/Users/{username}/Documents/GitHub/view-gen/FaceData/Person_2/Image_120.npy"
+        self.PathNPY2 = f"C:/Users/{username}/Documents/GitHub/view-gen/FaceData/Person_2/Image_34.npy"
 
-        self.PathImg1 = f"C:/Users/{username}/Documents/GitHub/ViewGen/FaceData/Person_2/Image_120.jpg"
-        self.PathImg2 = f"C:/Users/{username}/Documents/GitHub/ViewGen/FaceData/Person_2/Image_34.jpg"
+        self.PathImg1 = f"C:/Users/{username}/Documents/GitHub/view-gen/FaceData/Person_2/Image_120.jpg"
+        self.PathImg2 = f"C:/Users/{username}/Documents/GitHub/view-gen/FaceData/Person_2/Image_34.jpg"
 
-        self.path = f'C:/Users/{username}/Documents/GitHub/ViewGen/FaceData/Person_7'
+        self.path = f'C:/Users/{username}/Documents/GitHub/view-gen/FaceData/Person_7'
 
         self.DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.mp_drawing = mp.solutions.drawing_utils
