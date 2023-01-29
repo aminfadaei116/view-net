@@ -61,7 +61,7 @@ def draw(width, height, ref_key, tar_key, size=10, connect=False):
     :param:
 
     :return:
-    
+
 
     """
     key1 = torch.zeros((len(ref_key), 2))
@@ -89,26 +89,22 @@ def draw(width, height, ref_key, tar_key, size=10, connect=False):
     plt.gca().invert_yaxis()
     plt.show()
 
-
-def transform_keys(keys, euler, translation):
-    rotation_matrix = torch.linalg.multi_dot((R_x(euler[0]), R_y(euler[1]), R_z(euler[2])))
+def transform_keys(config, keys, euler, translation):
+    rotation_matrix = torch.linalg.multi_dot((R_x(config, euler[0]), R_y(config, euler[1]), R_z(config, euler[2])))
     center = torch.mean(keys, dim=0)
     keys = keys - center
     out = torch.matmul(keys, rotation_matrix)
     return out + center + translation
-
 
 def R_x(config, theta):
     return torch.tensor([[1, 0, 0],
                          [0, torch.cos(theta), -torch.sin(theta)],
                          [0, torch.sin(theta), torch.cos(theta)]], device=config.DEVICE, dtype=torch.double)
 
-
 def R_y(config, theta):
     return torch.tensor([[torch.cos(theta), 0, torch.sin(theta)],
                          [0, 1, 0],
                          [-torch.sin(theta), 0, torch.cos(theta)]], device=config.DEVICE, dtype=torch.double)
-
 
 def R_z(config, theta):
     return torch.tensor([[torch.cos(theta), -torch.sin(theta), 0],

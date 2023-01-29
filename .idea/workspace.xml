@@ -7,8 +7,6 @@
     <list default="true" id="7db84522-1b46-48ad-b5cd-0749d0c4ed3b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/face2face.py" beforeDir="false" afterPath="$PROJECT_DIR$/face2face.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/image2image.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/image2image.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/util.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -75,9 +73,6 @@
       <module name="View-Net" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="C:\Users\afadaeinejad\Anaconda3\envs\faceforge\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
