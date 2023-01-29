@@ -8,7 +8,6 @@ This script contains the functions of our model
 """
 
 import torch
-# import configs.config as config
 
 
 def MyInterpol(config, height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, distMethod="gaussian"):
@@ -59,17 +58,16 @@ def MyInterpol(config, height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, dis
     return 2 * InterpolatedFlowX, 2 * InterpolatedFlowY
 
 
-def RenderImage(config, height, width, refKey, tarKey, img, sd=0.01, eps=1e-10, distMethod="gaussian", numChannel=3):
-
+def render_image(config, height, width, ref_key, tar_key, img, sd=0.01, eps=1e-10, dist_method="gaussian", num_channel=3):
 
     with torch.no_grad():
-        X, Y= MyInterpol(config, height, width, refKey, tarKey, sd, eps, distMethod)
+        X, Y = MyInterpol(config, height, width, ref_key, tar_key, sd, eps, dist_method)
         d1 = torch.linspace(-1, 1, height, device=config.DEVICE)
         d2 = torch.linspace(-1, 1, width, device=config.DEVICE)
         my, mx = torch.meshgrid(d1, d2, indexing='ij')
 
-        meshx = mx.expand(int(len(refKey)/config.FACE_LANKMARK_LENGTH), height, width)
-        meshy = my.expand(int(len(refKey)/config.FACE_LANKMARK_LENGTH), height, width)
+        meshx = mx.expand(int(len(ref_key) / config.FACE_LANKMARK_LENGTH), height, width)
+        meshy = my.expand(int(len(ref_key) / config.FACE_LANKMARK_LENGTH), height, width)
         del mx
         del my
 
@@ -79,8 +77,8 @@ def RenderImage(config, height, width, refKey, tarKey, img, sd=0.01, eps=1e-10, 
         grid = torch.stack((meshx, meshy), 3)
 
         img = img.float().to(config.DEVICE)
-        img = torch.reshape(img, (-1, numChannel, height, width))
+        img = torch.reshape(img, (-1, num_channel, height, width))
 
         grid = grid.float()
-    output = torch.nn.functional.grid_sample(img, grid, padding_mode="border",align_corners=True)
+    output = torch.nn.functional.grid_sample(img, grid, padding_mode="border", align_corners=True)
     return output

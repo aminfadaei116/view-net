@@ -56,6 +56,14 @@ def show_image_tensor(img, is3chan=True, is_output=False, return_output=False):
 
 
 def draw(width, height, ref_key, tar_key, size=10, connect=False):
+    """
+
+    :param:
+
+    :return:
+    
+
+    """
     key1 = torch.zeros((len(ref_key), 2))
     key2 = torch.zeros((len(tar_key), 2))
     key1[:, 0] = ref_key[:, 0]
@@ -82,12 +90,12 @@ def draw(width, height, ref_key, tar_key, size=10, connect=False):
     plt.show()
 
 
-def transform_keys(keys, euler, t):
-    R = torch.linalg.multi_dot((R_x(euler[0]), R_y(euler[1]), R_z(euler[2])))
+def transform_keys(keys, euler, translation):
+    rotation_matrix = torch.linalg.multi_dot((R_x(euler[0]), R_y(euler[1]), R_z(euler[2])))
     center = torch.mean(keys, dim=0)
     keys = keys - center
-    out = torch.matmul(keys, R)
-    return out + center + t
+    out = torch.matmul(keys, rotation_matrix)
+    return out + center + translation
 
 
 def R_x(config, theta):
