@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="7db84522-1b46-48ad-b5cd-0749d0c4ed3b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/face2face.py" beforeDir="false" afterPath="$PROJECT_DIR$/face2face.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +36,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/afadaei/Documents/GitHub/pytorch-pix2pix",
+    "last_opened_file_path": "C:/Users/afadaei/Documents/GitHub/View-Net",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
