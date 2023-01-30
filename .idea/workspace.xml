@@ -4,9 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< Updated upstream
     <list default="true" id="7db84522-1b46-48ad-b5cd-0749d0c4ed3b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
+=======
+    <list default="true" id="7db84522-1b46-48ad-b5cd-0749d0c4ed3b" name="Changes" comment="" />
+>>>>>>> Stashed changes
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -107,6 +111,7 @@
       <workItem from="1674574327674" duration="1282000" />
       <workItem from="1674593976324" duration="275000" />
       <workItem from="1674594271512" duration="411000" />
+      <workItem from="1674852194286" duration="173000" />
     </task>
     <servers />
   </component>
