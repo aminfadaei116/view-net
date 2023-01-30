@@ -77,10 +77,14 @@ def show_image_tensor(img, is3chan=True, is_output=False, return_output=False) -
     Converts a multi dimensional tensor to an image
     :param:
         img: torch.tensor
+            A tensor that has the information of an image
         is3chan: bool
+            Does the output have 3 channels, RGB images have 3 channel and the masks have 1 channel.
         is_output: bool
+            Is the image the output from the model. The output models have an extra dimension for batch.
     :return:
         new_img: torch.tensor
+            Returns a tensor that has the correct dimension and device to be printed
     """
     new_img = img.clone().detach()
     if is_output:
@@ -104,9 +108,13 @@ def draw(width, height, ref_key, tar_key, size=10, connect=False) -> None:
     Will draw two sets of keypoints, can also connect the corresponding keypoints to each other
     :param:
         width: int
+            Image desired width
         height: int
+            Image desired deight
         ref_key: torch.tensor
+            location of reference image's keypoints
         tar_key: torch.tensor
+            location of target image's keypoints
         size: int
         connect: bool
     :return:
