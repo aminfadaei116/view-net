@@ -30,10 +30,9 @@ def interpolate_mesh(config, height, width, ref_key, tar_key, sd=0.01, eps=1e-10
         dist_method: str ["gaussian", "l2"]
             Method of calculating the coefficient
     :return:
-        InterpolatedFlowX: torch.tensor
-        InterpolatedFlowY: torch.tensor
+        mesh_flow_x: torch.tensor
+        mesh_flow_y: torch.tensor
     """
-
     d_key = tar_key - ref_key
     flow_x, flow_y = d_key[:, 0], d_key[:, 1]
     d1 = torch.linspace(0, 1, height, device=config.DEVICE)
@@ -49,33 +48,33 @@ def interpolate_mesh(config, height, width, ref_key, tar_key, sd=0.01, eps=1e-10
     del meshx
     del meshy
 
-    MeshXE = mx.expand(int(len(ref_key) / config.landmark_length), config.landmark_length, height, width)
-    MeshYE = my.expand(int(len(ref_key) / config.landmark_length), config.landmark_length, height, width)
+    mesh_xe = mx.expand(int(len(ref_key) / config.landmark_length), config.landmark_length, height, width)
+    mesh_ye = my.expand(int(len(ref_key) / config.landmark_length), config.landmark_length, height, width)
     del mx
     del my
     
-    MeshXE = MeshXE - tar_key[:, 0].view(-1, config.landmark_length, 1, 1)
-    MeshYE = MeshYE - tar_key[:, 1].view(-1, config.landmark_length, 1, 1)
+    mesh_xe = mesh_xe - tar_key[:, 0].view(-1, config.landmark_length, 1, 1)
+    mesh_ye = mesh_ye - tar_key[:, 1].view(-1, config.landmark_length, 1, 1)
 
     if dist_method == "gaussian":
         # index 0 is for returning the max value (no need for indices)
-        C = torch.max(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd), 1)[0]       
-        MeshE = torch.exp(-(MeshXE * MeshXE + MeshYE * MeshYE) / (2 * sd * sd) - C)
+        c = torch.max(-(mesh_xe * mesh_xe + mesh_ye * mesh_ye) / (2 * sd * sd), 1)[0]
+        mesh_e = torch.exp(-(mesh_xe * mesh_xe + mesh_ye * mesh_ye) / (2 * sd * sd) - c)
     elif dist_method == "l2":
-        MeshE = 1/(MeshXE * MeshXE + MeshYE * MeshYE + eps)
+        mesh_e = 1 / (mesh_xe * mesh_xe + mesh_ye * mesh_ye + eps)
     else:
         print("Distance method not found")
 
-    WeightMeshX = MeshE * flow_x.view(-1, config.landmark_length, 1, 1)
-    WeightMeshY = MeshE * flow_y.view(-1, config.landmark_length, 1, 1)
+    weight_meshx = mesh_e * flow_x.view(-1, config.landmark_length, 1, 1)
+    weight_meshy = mesh_e * flow_y.view(-1, config.landmark_length, 1, 1)
 
-    InterpolatedFlowX = 2 * torch.sum(WeightMeshX, dim=1)/torch.sum(MeshE, dim=1)
-    InterpolatedFlowY = 2 * torch.sum(WeightMeshY, dim=1)/torch.sum(MeshE, dim=1)
+    mesh_flow_x = 2 * torch.sum(weight_meshx, dim=1) / torch.sum(mesh_e, dim=1)
+    mesh_flow_y = 2 * torch.sum(weight_meshy, dim=1) / torch.sum(mesh_e, dim=1)
 
-    InterpolatedFlowX = torch.nan_to_num(InterpolatedFlowX)
-    InterpolatedFlowY = torch.nan_to_num(InterpolatedFlowY)
+    mesh_flow_x = torch.nan_to_num(mesh_flow_x)
+    mesh_flow_y = torch.nan_to_num(mesh_flow_y)
 
-    return InterpolatedFlowX, InterpolatedFlowY
+    return mesh_flow_x, mesh_flow_y
 
 
 def render_image(config, height, width, ref_key, tar_key, img, sd=0.01, eps=1e-10, dist_method="gaussian", num_channel=3
