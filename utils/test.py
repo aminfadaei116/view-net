@@ -12,7 +12,7 @@ from models.image2image import render_image
 import torch
 
 
-def use_webcam(config, height, width, ref_key, img_kef):
+def use_webcam(config, height, width, ref_key, img_kef) -> None:
     """
 
     :param:

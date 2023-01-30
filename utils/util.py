@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import torch
 
 
-def create_mask(config, keys, height, width, img=None):
+def create_mask(config, keys, height, width, img=None) -> torch.tensor:
     if img is not None:
         new_img = img.clone().detach().to(config.DEVICE)
         new_img[:, (height * keys[:, 1]).long(), (width * keys[:, 0]).long()] = 255.0
@@ -21,7 +21,7 @@ def create_mask(config, keys, height, width, img=None):
         return mask
 
 
-def create_mask2(config, keys, height, width, img=None):
+def create_mask2(config, keys, height, width, img=None) -> torch.tensor:
     if img is not None:
         new_img = img.clone().detach().to(config.DEVICE)
         for i in range(-1, 2):
@@ -36,7 +36,7 @@ def create_mask2(config, keys, height, width, img=None):
         return mask
 
 
-def show_image_tensor(img, is3chan=True, is_output=False, return_output=False):
+def show_image_tensor(img, is3chan=True, is_output=False, return_output=False) -> torch.tensor:
     new_img = img.clone().detach()
     if is_output:
         new_img = torch.squeeze(new_img)
@@ -55,7 +55,7 @@ def show_image_tensor(img, is3chan=True, is_output=False, return_output=False):
         return new_img
 
 
-def draw(width, height, ref_key, tar_key, size=10, connect=False):
+def draw(width, height, ref_key, tar_key, size=10, connect=False) -> None:
     """
 
     :param:
@@ -89,24 +89,28 @@ def draw(width, height, ref_key, tar_key, size=10, connect=False):
     plt.gca().invert_yaxis()
     plt.show()
 
-def transform_keys(config, keys, euler, translation):
-    rotation_matrix = torch.linalg.multi_dot((R_x(config, euler[0]), R_y(config, euler[1]), R_z(config, euler[2])))
+
+def transform_keys(config, keys, euler, translation) -> torch.tensor:
+    rotation_matrix = torch.linalg.multi_dot((r_x(config, euler[0]), r_y(config, euler[1]), r_z(config, euler[2])))
     center = torch.mean(keys, dim=0)
     keys = keys - center
     out = torch.matmul(keys, rotation_matrix)
     return out + center + translation
 
-def R_x(config, theta):
+
+def r_x(config, theta) -> torch.tensor:
     return torch.tensor([[1, 0, 0],
                          [0, torch.cos(theta), -torch.sin(theta)],
                          [0, torch.sin(theta), torch.cos(theta)]], device=config.DEVICE, dtype=torch.double)
 
-def R_y(config, theta):
+
+def r_y(config, theta) -> torch.tensor:
     return torch.tensor([[torch.cos(theta), 0, torch.sin(theta)],
                          [0, 1, 0],
                          [-torch.sin(theta), 0, torch.cos(theta)]], device=config.DEVICE, dtype=torch.double)
 
-def R_z(config, theta):
+
+def r_z(config, theta) -> torch.tensor:
     return torch.tensor([[torch.cos(theta), -torch.sin(theta), 0],
                          [torch.sin(theta), torch.cos(theta), 0],
                          [0, 0, 1]], device=config.DEVICE, dtype=torch.double)
