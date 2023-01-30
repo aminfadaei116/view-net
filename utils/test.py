@@ -10,9 +10,10 @@ import numpy as np
 import cv2
 from models.image2image import render_image
 import torch
+from configs.config import Config
 
 
-def use_webcam(config, height, width, ref_key, img_kef) -> None:
+def use_webcam(height, width, ref_key, img_kef) -> None:
     """
 
     :param:
@@ -26,7 +27,8 @@ def use_webcam(config, height, width, ref_key, img_kef) -> None:
       void
     """
     # For webcam input:
-    cap = cv2.VideoCapture(0)
+    config = Config("YorkU")
+    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     with config.mp_face_mesh.FaceMesh(
             max_num_faces=1,
             refine_landmarks=True,
@@ -34,13 +36,18 @@ def use_webcam(config, height, width, ref_key, img_kef) -> None:
             min_tracking_confidence=0.5) as face_mesh:
         while cap.isOpened():
             success, image = cap.read()
-            if config.system == "Ubisoft":
-                image = cv2.flip(image, 1)
+
+            print(success)
             if not success:
-                print("Ignoring empty camera frame.", image.shape)
+                print("Ignoring empty camera frame.")
                 # If loading a video, use 'break' instead of 'continue'.
                 continue
 
+            print(success)
+            print(image.shape)
+
+            if config.system == "Ubisoft":
+                image = cv2.flip(image, 1)
             # To improve performance, optionally mark the image as not writeable to
             # pass by reference.
             image.flags.writeable = False
