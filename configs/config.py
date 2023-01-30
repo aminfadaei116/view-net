@@ -12,8 +12,18 @@ import mediapipe as mp
 
 
 class Config:
+    """
 
+    A class used to represent the project configuration
+
+    """
     def __init__(self, system) -> None:
+        """
+        Creating the configuration class
+        :param:
+            system: str [Ubisoft | YorkU | laptop]
+                The device that I am currently using
+        """
         self.system = system
         if self.system == "Ubisoft":
             username = "afadaeinejad/OneDrive - Ubisoft"
@@ -21,6 +31,8 @@ class Config:
             username = "afadaei"
         elif self.system == "laptop":
             username = "Amin"
+        else:
+            print("System not detected")
 
         self.PathNPY1 = f"C:/Users/{username}/Documents/GitHub/view-gen/face-data/person_2/Image_120.npy"
         self.PathNPY2 = f"C:/Users/{username}/Documents/GitHub/view-gen/face-data/person_2/Image_34.npy"

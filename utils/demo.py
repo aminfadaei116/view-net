@@ -19,7 +19,7 @@ def use_webcam(config, height, width, ref_key, img_ref) -> None:
     webcam
     :param:
       config: class config
-        A class that has the settings
+        A class that has the configuration parameters
       height: int
       width: int
       ref_key: torch.tensor

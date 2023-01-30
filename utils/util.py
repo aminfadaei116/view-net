@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Aug 17 10:49:28 2022
 
-This script contains the functions of our model
+This script contains the functions required for the project
 
 @author: Amin Fadaeinejad
 """
@@ -12,16 +11,22 @@ import torch
 
 def create_mask(config, keys, height, width, img=None) -> torch.tensor:
     """
-    Converts the keypoints location to a mask marked by those keypoints.
-    If img is passed, the keypoints are going to be added to the image
+    Converts the key points location to a mask marked by those key points.
+    If img is passed, the key points are going to be added to the image
     :param:
         config: class Config
-        keys: torch.tensor
+            A class that has the configuration parameters
+        keys: torch.tensor [config.landmark_length, config.num_coordinate]
+            The location of the keypoints
         height: int
+            Mask desired height
         width: int
+            Mask desired width
         img: torch.tensor
+            Background on the mask (the keypoints will be added to the image)
     :return:
-        torch.tensor
+        mask: torch.tensor
+            Am image (could be binary or will background) that contains the location of the keypoints on it
     """
     if img is not None:
         new_img = img.clone().detach().to(config.DEVICE)
@@ -40,12 +45,18 @@ def create_mask2(config, keys, height, width, img=None) -> torch.tensor:
     The difference between this and create_mask is the size of the keypoints on the mask
     :param:
         config: class Config
-        keys: torch.tensor
+            A class that has the configuration parameters
+        keys: torch.tensor [config.landmark_length, config.num_coordinate]
+            The location of the keypoints
         height: int
+            Mask desired height
         width: int
-        img: torch.tensor
+            Mask desired width
+        img: torch.tensor [height, width]
+            Background on the mask (the keypoints will be added to the image)
     :return:
-        torch.tensor
+        mask: torch.tensor [height, width]
+            Am image (could be binary or will background) that contains the location of the keypoints on it
     """
     if img is not None:
         new_img = img.clone().detach().to(config.DEVICE)
@@ -69,7 +80,7 @@ def show_image_tensor(img, is3chan=True, is_output=False, return_output=False) -
         is3chan: bool
         is_output: bool
     :return:
-        torch.tensor
+        new_img: torch.tensor
     """
     new_img = img.clone().detach()
     if is_output:
@@ -132,6 +143,7 @@ def transform_keys(config, keys, euler, translation) -> torch.tensor:
     Applies a transformation, which consists of a rational and a translation
     :param:
         config: class Config
+            A class that has the configuration parameters
         keys: torch.tensor
         euler: torch.tensor [3,]
         translation: torch.tensor [3,1]
@@ -150,6 +162,7 @@ def r_x(config, theta) -> torch.tensor:
     Rotation matrix over the x-axis
     :param:
         config: class Config
+            A class that has the configuration parameters
         theta: torch.tensor [1,]
     :return:
         torch.tensor
@@ -164,6 +177,7 @@ def r_y(config, theta) -> torch.tensor:
     Rotation matrix over the y-axis
     :param:
         config: class Config
+            A class that has the configuration parameters
         theta: torch.tensor [1,]
     :return:
         torch.tensor
@@ -178,6 +192,7 @@ def r_z(config, theta) -> torch.tensor:
     Rotation matrix over the z-axis
     :param:
         config: class Config
+            A class that has the configuration parameters
         theta: torch.tensor [1,]
     :return:
         torch.tensor
