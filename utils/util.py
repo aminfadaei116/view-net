@@ -43,7 +43,6 @@ def show_image_tensor(img, is3chan=True, is_output=False, return_output=False) -
 
     new_img = new_img.to('cpu')
     if is3chan:
-        # plt.imshow((newImg.permute(1, 2, 0)*255).int())
         plt.imshow((new_img.permute(1, 2, 0)))
         plt.xlabel("x axis")
         plt.ylabel("y axis")

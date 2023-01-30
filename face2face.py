@@ -15,7 +15,7 @@ def main():
     # tarKey = torch.tensor(np.load(config.PathNPY2), device=config.DEVICE)
 
     height, width = img_ref.shape[1], img_ref.shape[2]
-    print("We are using the: ", config.DEVICE)
+    print("We are using the:", config.DEVICE)
 
     use_webcam(config, height, width, ref_key, img_ref)
 
