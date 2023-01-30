@@ -2,7 +2,7 @@ import numpy as np
 import torchvision
 from configs.config import Config
 from utils.util import *
-from utils.test import use_webcam
+from utils.demo import use_webcam
 
 
 def main():
