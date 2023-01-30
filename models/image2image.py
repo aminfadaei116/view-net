@@ -46,8 +46,8 @@ def MyInterpol(config, height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, dis
     else:
         print("Distance method not found")
 
-    WeightMeshX = MeshE * flowX.view(-1, config.FACE_LANKMARK_LENGTH, 1, 1)
-    WeightMeshY = MeshE * flowY.view(-1, config.FACE_LANKMARK_LENGTH, 1, 1)
+    WeightMeshX = MeshE * flowX.view(-1, config.landmark_length, 1, 1)
+    WeightMeshY = MeshE * flowY.view(-1, config.landmark_length, 1, 1)
 
     InterpolatedFlowX = torch.sum(WeightMeshX, dim=1)/torch.sum(MeshE, dim=1)
     InterpolatedFlowY = torch.sum(WeightMeshY, dim=1)/torch.sum(MeshE, dim=1)
@@ -66,8 +66,8 @@ def render_image(config, height, width, ref_key, tar_key, img, sd=0.01, eps=1e-1
         d2 = torch.linspace(-1, 1, width, device=config.DEVICE)
         my, mx = torch.meshgrid(d1, d2, indexing='ij')
 
-        meshx = mx.expand(int(len(ref_key) / config.FACE_LANKMARK_LENGTH), height, width)
-        meshy = my.expand(int(len(ref_key) / config.FACE_LANKMARK_LENGTH), height, width)
+        meshx = mx.expand(int(len(ref_key) / config.landmark_length), height, width)
+        meshy = my.expand(int(len(ref_key) / config.landmark_length), height, width)
         del mx
         del my
 

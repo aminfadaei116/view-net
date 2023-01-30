@@ -13,7 +13,7 @@ import torch
 from configs.config import Config
 
 
-def use_webcam(height, width, ref_key, img_kef) -> None:
+def use_webcam(config, height, width, ref_key, img_kef) -> None:
     """
 
     :param:
@@ -27,8 +27,7 @@ def use_webcam(height, width, ref_key, img_kef) -> None:
       void
     """
     # For webcam input:
-    config = Config("YorkU")
-    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    cap = cv2.VideoCapture(0)
     with config.mp_face_mesh.FaceMesh(
             max_num_faces=1,
             refine_landmarks=True,
@@ -37,14 +36,10 @@ def use_webcam(height, width, ref_key, img_kef) -> None:
         while cap.isOpened():
             success, image = cap.read()
 
-            print(success)
             if not success:
                 print("Ignoring empty camera frame.")
                 # If loading a video, use 'break' instead of 'continue'.
                 continue
-
-            print(success)
-            print(image.shape)
 
             if config.system == "Ubisoft":
                 image = cv2.flip(image, 1)
