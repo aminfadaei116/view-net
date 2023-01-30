@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Aug 17 10:49:28 2022
 
-This script contains the functions of our model
+This script contains the image renderer model
 
 @author: Amin Fadaeinejad
 """
@@ -10,9 +9,32 @@ This script contains the functions of our model
 import torch
 
 
-def MyInterpol(config, height, width, data_ref, data_targ, sd=0.01, eps=1e-10, dist_method="gaussian"):
+def interpolate_mesh(config, height, width, ref_key, tar_key, sd=0.01, eps=1e-10, dist_method="gaussian"):
+    """
 
-    d_key = data_targ - data_ref
+    :param:
+        config: class Config
+            A class that has the configuration parameters
+        height: int
+            The frames height
+        width: int
+            The frames width
+        ref_key: torch.tensor
+            Location of reference image's keypoints
+        tar_key: torch.tensor
+            Location of target image's keypoints
+        sd: float
+            Standard deviation
+        eps: float
+            A small value for preventing 0/0 from happening (only used in the "l2" method)
+        dist_method: str ["gaussian", "l2"]
+            Method of calculating the coefficient
+    :return:
+        InterpolatedFlowX: torch.tensor
+        InterpolatedFlowY: torch.tensor
+    """
+
+    d_key = tar_key - ref_key
     flow_x, flow_y = d_key[:, 0], d_key[:, 1]
     d1 = torch.linspace(0, 1, height, device=config.DEVICE)
     d2 = torch.linspace(0, 1, width, device=config.DEVICE)
@@ -27,13 +49,13 @@ def MyInterpol(config, height, width, data_ref, data_targ, sd=0.01, eps=1e-10, d
     del meshx
     del meshy
 
-    MeshXE = mx.expand(int(len(data_ref) / config.landmark_length), config.landmark_length, height, width)
-    MeshYE = my.expand(int(len(data_ref) / config.landmark_length), config.landmark_length, height, width)
+    MeshXE = mx.expand(int(len(ref_key) / config.landmark_length), config.landmark_length, height, width)
+    MeshYE = my.expand(int(len(ref_key) / config.landmark_length), config.landmark_length, height, width)
     del mx
     del my
     
-    MeshXE = MeshXE - data_targ[:, 0].view(-1, config.landmark_length, 1, 1)
-    MeshYE = MeshYE - data_targ[:, 1].view(-1, config.landmark_length, 1, 1)
+    MeshXE = MeshXE - tar_key[:, 0].view(-1, config.landmark_length, 1, 1)
+    MeshYE = MeshYE - tar_key[:, 1].view(-1, config.landmark_length, 1, 1)
 
     if dist_method == "gaussian":
         # index 0 is for returning the max value (no need for indices)
@@ -47,20 +69,34 @@ def MyInterpol(config, height, width, data_ref, data_targ, sd=0.01, eps=1e-10, d
     WeightMeshX = MeshE * flow_x.view(-1, config.landmark_length, 1, 1)
     WeightMeshY = MeshE * flow_y.view(-1, config.landmark_length, 1, 1)
 
-    InterpolatedFlowX = torch.sum(WeightMeshX, dim=1)/torch.sum(MeshE, dim=1)
-    InterpolatedFlowY = torch.sum(WeightMeshY, dim=1)/torch.sum(MeshE, dim=1)
+    InterpolatedFlowX = 2 * torch.sum(WeightMeshX, dim=1)/torch.sum(MeshE, dim=1)
+    InterpolatedFlowY = 2 * torch.sum(WeightMeshY, dim=1)/torch.sum(MeshE, dim=1)
 
     InterpolatedFlowX = torch.nan_to_num(InterpolatedFlowX)
     InterpolatedFlowY = torch.nan_to_num(InterpolatedFlowY)
 
-    return 2 * InterpolatedFlowX, 2 * InterpolatedFlowY
+    return InterpolatedFlowX, InterpolatedFlowY
 
 
 def render_image(config, height, width, ref_key, tar_key, img, sd=0.01, eps=1e-10, dist_method="gaussian", num_channel=3
                  ) -> torch.tensor:
-
+    """
+    Warps the source image based on its keypoints and the destination keypoints
+    :param:
+        config: class Config
+        height: int
+        width: int
+        ref_key: torch.tensor
+        tar_key: torch.tensor
+        img: torch.tensor
+        sd: float
+        eps:
+    :return:
+        output: torch.tensor
+            The rendered image using the source/target keypoints and the source image.
+    """
     with torch.no_grad():
-        X, Y = MyInterpol(config, height, width, ref_key, tar_key, sd, eps, dist_method)
+        X, Y = interpolate_mesh(config, height, width, ref_key, tar_key, sd, eps, dist_method)
         d1 = torch.linspace(-1, 1, height, device=config.DEVICE)
         d2 = torch.linspace(-1, 1, width, device=config.DEVICE)
         my, mx = torch.meshgrid(d1, d2, indexing='ij')

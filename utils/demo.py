@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Aug 17 10:49:28 2022
 
-This script contains the functions of our model
+This script contains the functions that you can play around with
 
 @author: Amin Fadaeinejad
 """
@@ -21,9 +20,13 @@ def use_webcam(config, height, width, ref_key, img_ref) -> None:
       config: class config
         A class that has the configuration parameters
       height: int
+        The frames height
       width: int
+        The frames width
       ref_key: torch.tensor
+        Location of reference image's keypoints
       img_ref: torch.tensor
+        Location of target image's keypoints
     return:
       None
     """
