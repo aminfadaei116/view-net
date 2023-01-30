@@ -13,7 +13,7 @@ import mediapipe as mp
 
 class Config:
 
-    def __init__(self, system):
+    def __init__(self, system) -> None:
         self.system = system
         if self.system == "Ubisoft":
             username = "afadaeinejad/OneDrive - Ubisoft"
@@ -34,9 +34,9 @@ class Config:
         self.mp_drawing = mp.solutions.drawing_utils
         self.mp_drawing_styles = mp.solutions.drawing_styles
         self.mp_face_mesh = mp.solutions.face_mesh
-        self.NUM_CHANNALS = 3
-        self.FACE_LANKMARK_LENGTH = 478
-        self.NUMBER_COORDINATE = 3
-        self.LOAD_MODEL = False
-        self.LEARNING_RATE = 0.001
+        self.num_channel = 3
+        self.landmark_length = 478
+        self.num_coordinate = 3
+        self.load_model = False
+        self.learning_rate = 0.001
         self.pi = 3.14159265359
