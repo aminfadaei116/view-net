@@ -13,20 +13,20 @@ import torch
 from configs.config import Config
 
 
-def use_webcam(config, height, width, ref_key, img_kef) -> None:
+def use_webcam(config, height, width, ref_key, img_ref) -> None:
     """
-
+    Generate a new image with the indenity of the img_ref/ref_key and the motion/location of the driving video from the
+    webcam
     :param:
       config: class config
+        A class that has the settings
       height: int
       width: int
-      ref_key:
-      img_ref:
-
+      ref_key: torch.tensor
+      img_ref: torch.tensor
     return:
-      void
+      None
     """
-    # For webcam input:
     cap = cv2.VideoCapture(0)
     with config.mp_face_mesh.FaceMesh(
             max_num_faces=1,
@@ -60,7 +60,7 @@ def use_webcam(config, height, width, ref_key, img_kef) -> None:
                 land_ten = torch.tensor(land_marks, device=config.DEVICE, requires_grad=False)
                 ##
                 with torch.no_grad():
-                    output = render_image(config, height, width, ref_key, land_ten, img_kef, sd=0.01)
+                    output = render_image(config, height, width, ref_key, land_ten, img_ref, sd=0.01)
 
                 dummy = torch.squeeze(output)
                 # dummy = createMask(landTen, height, width, dummy).int()
