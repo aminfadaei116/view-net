@@ -112,11 +112,13 @@ def draw(width, height, ref_key, tar_key, size=10, connect=False) -> None:
         height: int
             Image desired deight
         ref_key: torch.tensor
-            location of reference image's keypoints
+            Location of reference image's keypoints
         tar_key: torch.tensor
-            location of target image's keypoints
+            Location of target image's keypoints
         size: int
+            The size of the circles around the keypoints
         connect: bool
+            If the corresponding keypoints should be attached to each other
     :return:
         None
     """
@@ -153,10 +155,14 @@ def transform_keys(config, keys, euler, translation) -> torch.tensor:
         config: class Config
             A class that has the configuration parameters
         keys: torch.tensor
+            Location of image's keypoints
         euler: torch.tensor [3,]
-        translation: torch.tensor [3,1]
+            The three euler angels -> (alpha, beta, gamma)
+        translation: torch.tensor [3,]
+            The translation vector -> [x, y, z]
     :return:
         torch.tensor
+            The new transformed keypoints
     """
     rotation_matrix = torch.linalg.multi_dot((r_x(config, euler[0]), r_y(config, euler[1]), r_z(config, euler[2])))
     center = torch.mean(keys, dim=0)
@@ -172,8 +178,10 @@ def r_x(config, theta) -> torch.tensor:
         config: class Config
             A class that has the configuration parameters
         theta: torch.tensor [1,]
+            The eular angel for rotation over x axis -> alpha
     :return:
         torch.tensor
+            The rotation matrix over the x-axis
     """
     return torch.tensor([[1, 0, 0],
                          [0, torch.cos(theta), -torch.sin(theta)],
@@ -187,8 +195,10 @@ def r_y(config, theta) -> torch.tensor:
         config: class Config
             A class that has the configuration parameters
         theta: torch.tensor [1,]
+            The eular angel for rotation over y axis -> beta
     :return:
         torch.tensor
+            The rotation matrix over the y-axis
     """
     return torch.tensor([[torch.cos(theta), 0, torch.sin(theta)],
                          [0, 1, 0],
@@ -202,8 +212,10 @@ def r_z(config, theta) -> torch.tensor:
         config: class Config
             A class that has the configuration parameters
         theta: torch.tensor [1,]
+            The eular angel for rotation over z axis -> gamma
     :return:
         torch.tensor
+            The rotation matrix over the z-axis
     """
     return torch.tensor([[torch.cos(theta), -torch.sin(theta), 0],
                          [torch.sin(theta), torch.cos(theta), 0],
