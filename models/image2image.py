@@ -29,13 +29,13 @@ def MyInterpol(config, height, width, dataRef, dataTarg, sd=0.01, eps=1e-10, dis
     del meshx
     del meshy
 
-    MeshXE = mx.expand(int(len(dataRef)/config.FACE_LANKMARK_LENGTH), config.FACE_LANKMARK_LENGTH, height, width)
-    MeshYE = my.expand(int(len(dataRef)/config.FACE_LANKMARK_LENGTH), config.FACE_LANKMARK_LENGTH, height, width)
+    MeshXE = mx.expand(int(len(dataRef)/config.landmark_length), config.landmark_length, height, width)
+    MeshYE = my.expand(int(len(dataRef)/config.landmark_length), config.landmark_length, height, width)
     del mx
     del my
     
-    MeshXE = MeshXE - dataTarg[:, 0].view(-1, config.FACE_LANKMARK_LENGTH, 1, 1)
-    MeshYE = MeshYE - dataTarg[:, 1].view(-1, config.FACE_LANKMARK_LENGTH, 1, 1)
+    MeshXE = MeshXE - dataTarg[:, 0].view(-1, config.landmark_length, 1, 1)
+    MeshYE = MeshYE - dataTarg[:, 1].view(-1, config.landmark_length, 1, 1)
 
     if distMethod == "gaussian":
         # index 0 is for returning the max value (no need for indices)

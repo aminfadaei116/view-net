@@ -17,7 +17,7 @@ def main():
     height, width = img_ref.shape[1], img_ref.shape[2]
     print("We are using the: ", config.DEVICE)
 
-    # use_webcam(config, height, width, ref_key, img_ref)
+    use_webcam(config, height, width, ref_key, img_ref)
 
 
 if __name__ == "__main__":

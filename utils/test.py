@@ -37,7 +37,7 @@ def use_webcam(config, height, width, ref_key, img_kef) -> None:
             if config.system == "Ubisoft":
                 image = cv2.flip(image, 1)
             if not success:
-                print("Ignoring empty camera frame.")
+                print("Ignoring empty camera frame.", image.shape)
                 # If loading a video, use 'break' instead of 'continue'.
                 continue
 
@@ -51,7 +51,7 @@ def use_webcam(config, height, width, ref_key, img_kef) -> None:
             image.flags.writeable = True
             # image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
             if results.multi_face_landmarks:
-                land_marks = np.zeros((config.FACE_LANKMARK_LENGTH, 3))
+                land_marks = np.zeros((config.landmark_length, 3))
                 for i, land in enumerate(results.multi_face_landmarks[0].landmark):
                     land_marks[i] = [land.x, land.y, land.z]
 
