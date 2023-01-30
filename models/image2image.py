@@ -84,12 +84,19 @@ def render_image(config, height, width, ref_key, tar_key, img, sd=0.01, eps=1e-1
     :param:
         config: class Config
         height: int
+            The frames height
         width: int
+            The frames width
         ref_key: torch.tensor
+            Location of reference image's keypoints
         tar_key: torch.tensor
+            Location of target image's keypoints
         img: torch.tensor
+            Source image that needs to be rendered
         sd: float
-        eps:
+            Standard deviation
+        eps: float
+            A small value for preventing 0/0 from happening (only used in the "l2" method)
     :return:
         output: torch.tensor
             The rendered image using the source/target keypoints and the source image.

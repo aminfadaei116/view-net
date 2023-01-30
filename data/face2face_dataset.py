@@ -1,48 +1,61 @@
-"""
-@author: Amin Fadaeinejad
-"""
-
-
-import glob
-import random
 import os
-import numpy as np
-
-from torch.utils.data import Dataset
+from data.base_dataset import BaseDataset, get_params, get_transform
+from data.image_folder import make_dataset
 from PIL import Image
-import torchvision.transforms as transforms
+import random
 
+class UbisoftDataset(BaseDataset):
 
-class ImageDataset(Dataset):
-    """"
-    This dataset class contains images from two domain
-    Domain A: The source image after warp
-    Domain B: The ground truth
-    """
+    def __init__(self, opt):
+        """Initialize this dataset class.
 
+        Parameters:
+            opt (Option class) -- stores all the experiment flags; needs to be a subclass of BaseOptions
+        """
+        BaseDataset.__init__(self, opt)
 
-    def __init__(self, root, transforms_=None, mode="train"):
-        self.transform = transforms.Compose(transforms_)
+        self.dir_A = os.path.join(opt.dataroot, opt.phase, 'albedo')  # create a path '/path/to/data/train/albedo'
+        self.dir_B = os.path.join(opt.dataroot, opt.phase, 'concat')  # create a path '/path/to/data/train/concat'
 
-        self.files = sorted(glob.glob(os.path.join(root, mode) + "/*.*"))
-        if mode == "train":
-            self.files.extend(sorted(glob.glob(os.path.join(root, "test") + "/*.*")))
+        self.A_paths = sorted(make_dataset(self.dir_A, opt.max_dataset_size))  # load images from '/path/to/data/trainA'
+        self.B_paths = sorted(make_dataset(self.dir_B, opt.max_dataset_size))  # load images from '/path/to/data/trainB'
+        self.A_size = len(self.A_paths)  # get the size of dataset A
+        self.B_size = len(self.B_paths)  # get the size of dataset B
+
+        assert(self.opt.load_size >= self.opt.crop_size)   # crop_size should be smaller than the size of loaded image
+        self.input_nc = self.opt.output_nc if self.opt.direction == 'BtoA' else self.opt.input_nc
+        self.output_nc = self.opt.input_nc if self.opt.direction == 'BtoA' else self.opt.output_nc
+
+        self.transform_A = get_transform(self.opt, grayscale=(self.input_nc == 1))
+        self.transform_B = get_transform(self.opt, grayscale=(self.output_nc == 1))
 
     def __getitem__(self, index):
+        """Return a data point and its metadata information.
 
-        img = Image.open(self.files[index % len(self.files)])
-        w, h = img.size
-        img_A = img.crop((0, 0, w / 2, h))
-        img_B = img.crop((w / 2, 0, w, h))
+        Parameters:
+            index (int)      -- a random integer for data indexing
 
-        if np.random.random() < 0.5:
-            img_A = Image.fromarray(np.array(img_A)[:, ::-1, :], "RGB")
-            img_B = Image.fromarray(np.array(img_B)[:, ::-1, :], "RGB")
+        Returns a dictionary that contains A, B, A_paths and B_paths
+            A (tensor)       -- an image in the input domain
+            B (tensor)       -- its corresponding image in the target domain
+            A_paths (str)    -- image paths
+            B_paths (str)    -- image paths
+        """
+        A_path = self.A_paths[index % self.A_size]  # make sure index is within then range
+        index_B = index % self.B_size
+        B_path = self.B_paths[index_B]
+        A_img = Image.open(A_path).convert('RGB')
+        B_img = Image.open(B_path).convert('RGB')
+        # apply image transformation
+        A = self.transform_A(A_img)
+        B = self.transform_B(B_img)
 
-        img_A = self.transform(img_A)
-        img_B = self.transform(img_B)
-
-        return {"A": img_A, "B": img_B}
+        return {'A': A, 'B': B, 'A_paths': A_path, 'B_paths': B_path}
 
     def __len__(self):
-        return len(self.files)
+        """Return the total number of images in the dataset.
+
+        As we have two datasets with potentially different number of images,
+        we take a maximum of
+        """
+        return max(self.A_size, self.B_size)
