@@ -7,7 +7,7 @@ from utils.demo import use_webcam
 
 def main():
 
-    config = Config("Ubisoft")
+    config = Config("laptop")
     img_ref = torchvision.io.read_image(config.PathImg1)
     # imgTar = torchvision.io.read_image(config.PathImg2)
 
