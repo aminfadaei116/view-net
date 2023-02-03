@@ -1,0 +1,4 @@
+# notebook files or files created by the IDE
+.idea
+.ipynb_checkpoints
+__pycache__
