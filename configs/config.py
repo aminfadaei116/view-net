@@ -17,19 +17,18 @@ class Config:
     A class used to represent the project configuration
 
     """
-    def __init__(self, system) -> None:
+    def __init__(self, parser) -> None:
         """
         Creating the configuration class
         :param:
-            system: str [Ubisoft | YorkU | laptop]
+            parser: str [Ubisoft | YorkU | laptop]
                 The device that I am currently using
         """
-        self.system = system
-        if self.system == "Ubisoft":
+        if parser.used_device == "Ubisoft":
             username = "afadaeinejad/OneDrive - Ubisoft"
-        elif self.system == "YorkU":
+        elif parser.used_device == "YorkU":
             username = "afadaei"
-        elif self.system == "laptop":
+        elif parser.used_device == "laptop":
             username = "Amin"
         else:
             print("System not detected")

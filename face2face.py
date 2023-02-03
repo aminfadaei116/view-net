@@ -3,11 +3,12 @@ import torchvision
 from configs.config import Config
 from utils.util import *
 from utils.demo import use_webcam
+from options.face2face_options import Face2FaceOption
 
 
 def main():
-
-    config = Config("laptop")
+    parser = Face2FaceOption().get_parser()
+    config = Config(parser)
     img_ref = torchvision.io.read_image(config.PathImg1)
     # imgTar = torchvision.io.read_image(config.PathImg2)
 
