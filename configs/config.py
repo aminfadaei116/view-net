@@ -40,7 +40,7 @@ class Config:
         self.PathImg2 = f"C:/Users/{username}/Documents/GitHub/view-gen/face-data/person_2/Image_34.jpg"
 
         self.path = f'C:/Users/{username}/Documents/GitHub/view-gen/face-data/person_7'
-
+        self.used_device = parser.used_device
         self.DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.mp_drawing = mp.solutions.drawing_utils
         self.mp_drawing_styles = mp.solutions.drawing_styles

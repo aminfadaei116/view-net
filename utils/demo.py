@@ -44,7 +44,7 @@ def use_webcam(config, height, width, ref_key, img_ref) -> None:
                 # If loading a video, use 'break' instead of 'continue'.
                 continue
 
-            if config.system == "Ubisoft":
+            if config.used_device == "Ubisoft":
                 image = cv2.flip(image, 1)
             # To improve performance, optionally mark the image as not writeable to
             # pass by reference.
