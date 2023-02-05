@@ -35,8 +35,8 @@ def interpolate_mesh(config, height, width, ref_key, tar_key, sd=0.01, eps=1e-10
     """
     d_key = tar_key - ref_key
     flow_x, flow_y = d_key[:, 0], d_key[:, 1]
-    d1 = torch.linspace(0, 1, height, device=config.DEVICE)
-    d2 = torch.linspace(0, 1, width, device=config.DEVICE)
+    d1 = torch.linspace(0, 1, height, device=config.device)
+    d2 = torch.linspace(0, 1, width, device=config.device)
   
     meshy, meshx = torch.meshgrid(d1, d2, indexing='ij')
     del d1
@@ -103,8 +103,8 @@ def render_image(config, height, width, ref_key, tar_key, img, sd=0.01, eps=1e-1
     """
     with torch.no_grad():
         X, Y = interpolate_mesh(config, height, width, ref_key, tar_key, sd, eps, dist_method)
-        d1 = torch.linspace(-1, 1, height, device=config.DEVICE)
-        d2 = torch.linspace(-1, 1, width, device=config.DEVICE)
+        d1 = torch.linspace(-1, 1, height, device=config.device)
+        d2 = torch.linspace(-1, 1, width, device=config.device)
         my, mx = torch.meshgrid(d1, d2, indexing='ij')
 
         meshx = mx.expand(int(len(ref_key) / config.landmark_length), height, width)
@@ -117,7 +117,7 @@ def render_image(config, height, width, ref_key, tar_key, img, sd=0.01, eps=1e-1
 
         grid = torch.stack((meshx, meshy), 3)
 
-        img = img.float().to(config.DEVICE)
+        img = img.float().to(config.device)
         img = torch.reshape(img, (-1, num_channel, height, width))
 
         grid = grid.float()

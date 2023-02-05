@@ -29,11 +29,11 @@ def create_mask(config, keys, height, width, img=None) -> torch.tensor:
             Am image (could be binary or will background) that contains the location of the keypoints on it
     """
     if img is not None:
-        new_img = img.clone().detach().to(config.DEVICE)
+        new_img = img.clone().detach().to(config.device)
         new_img[:, (height * keys[:, 1]).long(), (width * keys[:, 0]).long()] = 255.0
         return new_img
     else:
-        mask = torch.zeros((height, width), device=config.DEVICE)
+        mask = torch.zeros((height, width), device=config.device)
         mask[(height * keys[:, 1]).long(), (width * keys[:, 0]).long()] = 1
         return mask
 
@@ -59,13 +59,13 @@ def create_mask2(config, keys, height, width, img=None) -> torch.tensor:
             Am image (could be binary or will background) that contains the location of the keypoints on it
     """
     if img is not None:
-        new_img = img.clone().detach().to(config.DEVICE)
+        new_img = img.clone().detach().to(config.device)
         for i in range(-1, 2):
             for j in range(-1, 2):
                 new_img[:, (height * keys[:, 1]).long() + i, (width * keys[:, 0]).long() + j] = 255.0
         return new_img
     else:
-        mask = torch.zeros((height, width), device=config.DEVICE)
+        mask = torch.zeros((height, width), device=config.device)
         for i in range(-1, 2):
             for j in range(-1, 2):
                 mask[(height * keys[:, 1]).long() + i, (width * keys[:, 0]).long() + j] = 1
@@ -185,7 +185,7 @@ def r_x(config, theta) -> torch.tensor:
     """
     return torch.tensor([[1, 0, 0],
                          [0, torch.cos(theta), -torch.sin(theta)],
-                         [0, torch.sin(theta), torch.cos(theta)]], device=config.DEVICE, dtype=torch.double)
+                         [0, torch.sin(theta), torch.cos(theta)]], device=config.device, dtype=torch.double)
 
 
 def r_y(config, theta) -> torch.tensor:
@@ -202,7 +202,7 @@ def r_y(config, theta) -> torch.tensor:
     """
     return torch.tensor([[torch.cos(theta), 0, torch.sin(theta)],
                          [0, 1, 0],
-                         [-torch.sin(theta), 0, torch.cos(theta)]], device=config.DEVICE, dtype=torch.double)
+                         [-torch.sin(theta), 0, torch.cos(theta)]], device=config.device, dtype=torch.double)
 
 
 def r_z(config, theta) -> torch.tensor:
@@ -219,4 +219,4 @@ def r_z(config, theta) -> torch.tensor:
     """
     return torch.tensor([[torch.cos(theta), -torch.sin(theta), 0],
                          [torch.sin(theta), torch.cos(theta), 0],
-                         [0, 0, 1]], device=config.DEVICE, dtype=torch.double)
+                         [0, 0, 1]], device=config.device, dtype=torch.double)

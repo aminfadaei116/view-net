@@ -33,17 +33,15 @@ class Config:
         else:
             print("System not detected")
 
-        self.PathNPY1 = f"C:/Users/{username}/Documents/GitHub/view-gen/face-data/person_2/Image_120.npy"
-        self.PathNPY2 = f"C:/Users/{username}/Documents/GitHub/view-gen/face-data/person_2/Image_34.npy"
+        self.PathNPY1 = f"C:/Users/{username}/Documents/GitHub/view-gen/face-data/person_02/Image_120.npy"
+        self.PathNPY2 = f"C:/Users/{username}/Documents/GitHub/view-gen/face-data/person_02/Image_34.npy"
 
-        self.PathImg1 = f"C:/Users/{username}/Documents/GitHub/view-gen/face-data/person_2/Image_120.jpg"
-        self.PathImg2 = f"C:/Users/{username}/Documents/GitHub/view-gen/face-data/person_2/Image_34.jpg"
+        self.PathImg1 = f"C:/Users/{username}/Documents/GitHub/view-gen/face-data/person_02/Image_120.jpg"
+        self.PathImg2 = f"C:/Users/{username}/Documents/GitHub/view-gen/face-data/person_02/Image_34.jpg"
 
-        self.path = f'C:/Users/{username}/Documents/GitHub/view-gen/face-data/person_7'
+        self.path = f'C:/Users/{username}/Documents/GitHub/view-gen/face-data/person_07'
         self.used_device = parser.used_device
-        self.DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.mp_drawing = mp.solutions.drawing_utils
-        self.mp_drawing_styles = mp.solutions.drawing_styles
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.mp_face_mesh = mp.solutions.face_mesh
         self.num_channel = 3
         self.landmark_length = 478

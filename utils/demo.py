@@ -60,7 +60,7 @@ def use_webcam(config, height, width, ref_key, img_ref) -> None:
                 for i, land in enumerate(results.multi_face_landmarks[0].landmark):
                     land_marks[i] = [land.x, land.y, land.z]
 
-                land_ten = torch.tensor(land_marks, device=config.DEVICE, requires_grad=False)
+                land_ten = torch.tensor(land_marks, device=config.device, requires_grad=False)
                 ##
                 with torch.no_grad():
                     output = render_image(config, height, width, ref_key, land_ten, img_ref, sd=0.01)
