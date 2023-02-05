@@ -8,6 +8,7 @@ from options.face2face_options import Face2FaceOption
 
 def main():
     parser = Face2FaceOption().get_parser()
+    parser2 = Face2FaceOption().get_parser()
     config = Config(parser)
     img_ref = torchvision.io.read_image(config.PathImg1)
     # imgTar = torchvision.io.read_image(config.PathImg2)
