@@ -1,8 +1,8 @@
 import numpy as np
 import torchvision
 from configs.config import Config
-from utils.util import *
-from utils.demo import use_webcam
+from util.util import *
+from util.demo import use_webcam
 from options.face2face_options import Face2FaceOption
 
 
