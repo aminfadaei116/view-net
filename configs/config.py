@@ -16,6 +16,8 @@ class Config:
 
     A class used to represent the project configuration
 
+    example: --used_device YorkU
+
     """
     def __init__(self, parser) -> None:
         """
