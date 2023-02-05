@@ -31,7 +31,7 @@ class Config:
         elif parser.used_device == "laptop":
             username = "Amin"
         else:
-            print("System not detected")
+            raise Exception("System not detected (--used_device no valid)")
 
         self.PathNPY1 = f"C:/Users/{username}/Documents/GitHub/view-gen/face-data/person_02/Image_120.npy"
         self.PathNPY2 = f"C:/Users/{username}/Documents/GitHub/view-gen/face-data/person_02/Image_34.npy"

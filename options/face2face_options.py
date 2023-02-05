@@ -17,6 +17,5 @@ class Face2FaceOption:
         get the parser parameters
         :return: class parser
             Class containing the parameter information
-
         """
         return self.parser.parse_args()

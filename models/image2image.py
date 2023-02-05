@@ -64,7 +64,7 @@ def interpolate_mesh(config, height, width, ref_key, tar_key, sd=0.01, eps=1e-10
     elif dist_method == "l2":
         mesh_e = 1 / (mesh_xe * mesh_xe + mesh_ye * mesh_ye + eps)
     else:
-        print("Distance method not found")
+        raise Exception("Distance method not found")
 
     weight_meshx = mesh_e * flow_x.view(-1, config.landmark_length, 1, 1)
     weight_meshy = mesh_e * flow_y.view(-1, config.landmark_length, 1, 1)
