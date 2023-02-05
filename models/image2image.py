@@ -9,9 +9,10 @@ This script contains the image renderer model
 import torch
 
 
-def interpolate_mesh(config, height, width, ref_key, tar_key, sd=0.01, eps=1e-10, dist_method="gaussian"):
+def interpolate_mesh(config, height, width, ref_key, tar_key, sd=0.01, eps=1e-10, dist_method="gaussian") -> \
+        torch.tensor:
     """
-
+    Interpolate over the entire mask based on the values located on sparse keypoints
     :param:
         config: class Config
             A class that has the configuration parameters
