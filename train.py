@@ -1,3 +1,8 @@
+"""
+@author: authors of pix2pix
+@link: https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix
+"""
+
 """General-purpose training script for image-to-image translation.
 
 This script works for various models (with option '--model': e.g., pix2pix, cyclegan, colorization) and

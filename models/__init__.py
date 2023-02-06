@@ -1,3 +1,7 @@
+"""
+@author: authors of pix2pix
+@link: https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix
+"""
 """This package contains modules related to objective functions, optimizations, and network architectures.
 
 To add a custom model class called 'dummy', you need to add a file called 'dummy_model.py' and define a subclass DummyModel inherited from BaseModel.

@@ -1,3 +1,7 @@
+"""
+@author: authors of pix2pix
+@link: https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix
+"""
 import torch
 import itertools
 from util.image_pool import ImagePool

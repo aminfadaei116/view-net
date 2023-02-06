@@ -1,3 +1,7 @@
+"""
+@author: authors of pix2pix
+@link: https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix
+"""
 from __future__ import print_function
 import os
 import tarfile

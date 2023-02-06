@@ -1,3 +1,8 @@
+"""
+@author: authors of pix2pix
+@link: https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix
+"""
+
 """General-purpose test script for image-to-image translation.
 
 Once you have trained your model with train.py, you can use this script to test the model.

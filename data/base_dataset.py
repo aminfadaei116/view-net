@@ -1,3 +1,7 @@
+"""
+@author: authors of pix2pix
+@link: https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix
+"""
 """This module implements an abstract base class (ABC) 'BaseDataset' for datasets.
 
 It also includes common transformation functions (e.g., get_transform, __scale_width), which can be later used in subclasses.
