@@ -26,6 +26,7 @@ class Face2FaceTrainOption(BaseOptions):
         The default base options for the pix2pix train model
         """
         parser = TrainOptions.initialize(self, parser)
+        self.isTrain = True
         self.parser = parser
 
     def get_parser(self):

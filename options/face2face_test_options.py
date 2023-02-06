@@ -26,6 +26,7 @@ class Face2FaceTestOption(BaseOptions):
         The default base options for the pix2pix test model
         """
         parser = TestOptions.initialize(self, parser)
+        self.isTrain = False
         self.parser = parser
 
     def get_parser(self):
