@@ -7,10 +7,9 @@ This script contains the options used doe the face2face model
 import argparse
 from .base_options import BaseOptions
 from options.test_options import TestOptions
-from options.train_options import TrainOptions
 
 
-class Face2FaceOption(BaseOptions):
+class Face2FaceTestOption(BaseOptions):
     """
     This class defines options used for the face2face model
     """
@@ -24,18 +23,9 @@ class Face2FaceOption(BaseOptions):
                                  '[ YorkU | Ubisoft | laptop ]')
         parser.add_argument('--mode', type=str, default='test', help="Model mode to -> [ train | test ] ")
         """
-        The default base options for the pix2pix model
+        The default base options for the pix2pix test model
         """
-        # parser = BaseOptions.initialize(self, parser)
-        """
-        The options for test or tran mode
-        """
-        if parser.parse_args().mode == "train":
-            parser = TrainOptions.initialize(self, parser)
-        elif parser.parse_args().mode == "test":
-            parser = TestOptions.initialize(self, parser)
-        else:
-            raise Exception("Mode not valid")
+        parser = TestOptions.initialize(self, parser)
         self.parser = parser
 
     def get_parser(self):
