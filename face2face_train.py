@@ -15,21 +15,21 @@ def main():
     example for the command:
     --used_device YorkU --model pix2pix --name first_try --dataroot test
     """
-    parser = Face2FaceTrainOption().get_parser()
-    config = Config(parser)
-    model = create_model(parser)  # create a model given opt.model and other options
-    model.setup(parser)
+    opt = Face2FaceTrainOption().parse()
+    config = Config(opt)
+    model = create_model(opt)  # create a model given opt.model and other options
+    model.setup(opt)
 
-    # img_ref = torchvision.io.read_image(config.PathImg1)
-    # # imgTar = torchvision.io.read_image(config.PathImg2)
-    #
-    # ref_key = torch.tensor(np.load(config.PathNPY1), device=config.device)
-    # # tarKey = torch.tensor(np.load(config.PathNPY2), device=config.device)
-    #
-    # height, width = img_ref.shape[1], img_ref.shape[2]
-    # print("We are using the:", config.device)
-    #
-    # use_webcam(config, height, width, ref_key, img_ref)
+    img_ref = torchvision.io.read_image(config.PathImg1)
+    # imgTar = torchvision.io.read_image(config.PathImg2)
+
+    ref_key = torch.tensor(np.load(config.PathNPY1), device=config.device)
+    # tarKey = torch.tensor(np.load(config.PathNPY2), device=config.device)
+
+    height, width = img_ref.shape[1], img_ref.shape[2]
+    print("We are using the:", config.device)
+
+    use_webcam(config, height, width, ref_key, img_ref)
 
 
 if __name__ == "__main__":
