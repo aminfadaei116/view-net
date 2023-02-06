@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-
 This script contains the image renderer model
 
 @author: Amin Fadaeinejad

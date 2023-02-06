@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-
 This script contains the functions required for the project
 
 @author: Amin Fadaeinejad

@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+This script contains the options used doe the face2face model
+
+@author: Amin Fadaeinejad
+"""
 import argparse
 
 

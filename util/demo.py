@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-
 This script contains the functions that you can play around with
 
 @author: Amin Fadaeinejad

@@ -1,8 +1,14 @@
+# -*- coding: utf-8 -*-
+"""
+This script contains the dataloader of our model
+
+@author: Amin Fadaeinejad
+"""
+
 import os
 from data.base_dataset import BaseDataset, get_params, get_transform
 from data.image_folder import make_dataset
 from PIL import Image
-import random
 
 class UbisoftDataset(BaseDataset):
 

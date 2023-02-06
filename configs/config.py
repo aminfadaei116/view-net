@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Aug 17 10:55:15 2022
-
 This script contains the hyper parameters of our model
 
 @author: Amin Fadaeinejad
