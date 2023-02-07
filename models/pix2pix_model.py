@@ -89,7 +89,7 @@ class Pix2PixModel(BaseModel):
         B_key = torch.squeeze(input['B_key' if AtoB else 'A_key'])
         A_key = torch.squeeze(input['A_key' if AtoB else 'B_key'])
         with torch.no_grad():
-            self.real_A = render_image(self.config, self.real_B.shape[2], self.real_B.shape[3],
+            self.real_A = render_image(self.config, 256, 256,
                                        A_key, B_key, input['A' if AtoB else 'B'].to(self.device), sd=0.01)
 
         self.image_paths = input['A_paths' if AtoB else 'B_paths']
