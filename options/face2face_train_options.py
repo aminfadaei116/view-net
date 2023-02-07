@@ -21,7 +21,8 @@ class Face2FaceTrainOption(BaseOptions):
         parser.add_argument('--used_device', type=str, default='none',
                             help='Which device are you using at the moment-> '
                                  '[ YorkU | Ubisoft | laptop ]')
-        parser.add_argument('--mode', type=str, default='test', help="Model mode to -> [ train | test ] ")
+        parser.add_argument('--domain_A', type=str, default='', help="what is the first folder name")
+        parser.add_argument('--domain_B', type=str, default='', help="what is the first folder name")
         """
         The default base options for the pix2pix train model
         """

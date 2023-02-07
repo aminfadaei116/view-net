@@ -12,7 +12,7 @@ from util.visualizer import Visualizer
 def main():
     """
     example for the command:
-    --used_device YorkU --model pix2pix --name first_try --dataroot test
+    --used_device YorkU --model pix2pix --name first_try --dataroot datasets\face2face --domain_A person_08 --domain_B person_09
     """
     opt = Face2FaceTrainOption().parse()
     config = Config(opt)
@@ -24,16 +24,16 @@ def main():
     # visualizer = Visualizer(opt)   # create a visualizer that display/save images and plots
     total_iters = 0                # the total number of training iterations
 
-    img_ref = torchvision.io.read_image(config.PathImg1)
-    # imgTar = torchvision.io.read_image(config.PathImg2)
-
-    ref_key = torch.tensor(np.load(config.PathNPY1), device=config.device)
-    # tarKey = torch.tensor(np.load(config.PathNPY2), device=config.device)
-
-    height, width = img_ref.shape[1], img_ref.shape[2]
-    print("We are using the:", config.device)
-
-    use_webcam(config, height, width, ref_key, img_ref)
+    # img_ref = torchvision.io.read_image(config.PathImg1)
+    # # imgTar = torchvision.io.read_image(config.PathImg2)
+    #
+    # ref_key = torch.tensor(np.load(config.PathNPY1), device=config.device)
+    # # tarKey = torch.tensor(np.load(config.PathNPY2), device=config.device)
+    #
+    # height, width = img_ref.shape[1], img_ref.shape[2]
+    # print("We are using the:", config.device)
+    #
+    # use_webcam(config, height, width, ref_key, img_ref)
 
 
 if __name__ == "__main__":
