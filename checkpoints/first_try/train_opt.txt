@@ -4,7 +4,7 @@
           checkpoints_dir: ./checkpoints                 
            continue_train: False                         
                 crop_size: 256                           
-                 dataroot: datasets\face2face            	[default: None]
+                 dataroot: .\datasets\face2face          	[default: None]
              dataset_mode: face2face                     
                 direction: AtoB                          
               display_env: main                          
@@ -14,8 +14,8 @@
              display_port: 8097                          
            display_server: http://localhost              
           display_winsize: 256                           
-                 domain_A:                               
-                 domain_B:                               
+                 domain_A: person_08                     	[default: ]
+                 domain_B: person_09                     	[default: ]
                     epoch: latest                        
               epoch_count: 1                             
                  gan_mode: vanilla                       

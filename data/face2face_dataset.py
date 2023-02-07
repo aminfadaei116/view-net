@@ -7,8 +7,7 @@ This script contains the dataloader of our model
 
 import os
 from data.base_dataset import BaseDataset, get_params, get_transform
-from data.image_folder import make_dataset
-from data.image_folder import get_keys
+from data.image_folder import make_dataset, get_keys
 from PIL import Image
 import numpy as np
 import torch
@@ -61,8 +60,9 @@ class Face2FaceDataset(BaseDataset):
         # apply the same transform to both A and B
         transform_A = get_transform(self.opt, transform_params, grayscale=(self.input_nc == 1))
         transform_B = get_transform(self.opt, transform_params, grayscale=(self.output_nc == 1))
-        A_keypoints = torch.tensor(np.load(get_keys(A_path)), device=self.device)
-        B_keypoints = torch.tensor(np.load(get_keys(B_path)), device=self.device)
+
+        A_keypoints = torch.tensor(np.load(get_keys(A_path)), device='cpu')
+        B_keypoints = torch.tensor(np.load(get_keys(B_path)), device='cpu')
         A = transform_A(A_img)
         B = transform_B(B_img)
 
