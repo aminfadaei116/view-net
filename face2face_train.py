@@ -13,7 +13,7 @@ import time
 def main():
     """
     example for the command:
-    --used_device YorkU --model pix2pix --name first_try --dataroot datasets\face2face --domain_A person_08 --domain_B person_09
+    --used_device YorkU --model pix2pix --name first_try --dataroot .\datasets\face2face --domain_A person_08 --domain_B person_09
     """
     opt = Face2FaceTrainOption().parse()
     config = Config(opt)
