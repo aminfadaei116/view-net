@@ -3,11 +3,10 @@ import torchvision
 from configs.config import Config
 from util.utils import *
 from util.demo import use_webcam
-from options.face2face_test_options import Face2FaceTestOption
 from options.face2face_train_options import Face2FaceTrainOption
-from data import create_dataset
 from models import create_model
-# from util.visualizer import Visualizer
+from data import create_dataset
+from util.visualizer import Visualizer
 
 
 def main():
@@ -19,6 +18,11 @@ def main():
     config = Config(opt)
     model = create_model(opt)  # create a model given opt.model and other options
     model.setup(opt)
+    dataset = create_dataset(opt)  # create a dataset given opt.dataset_mode and other options
+    dataset_size = len(dataset)    # get the number of images in the dataset.
+    print('The number of training images = %d' % dataset_size)
+    # visualizer = Visualizer(opt)   # create a visualizer that display/save images and plots
+    total_iters = 0                # the total number of training iterations
 
     img_ref = torchvision.io.read_image(config.PathImg1)
     # imgTar = torchvision.io.read_image(config.PathImg2)
