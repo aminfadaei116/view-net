@@ -8,6 +8,7 @@ from models import create_model
 from data import create_dataset
 from util.visualizer import Visualizer
 import time
+from torchvision.utils import save_image
 
 
 def main():
@@ -30,14 +31,15 @@ def main():
     #
     # use_webcam(config, height, width, ref_key, img_ref)
 
-
+    ##### not do this
+    
     model = create_model(opt, config)  # create a model given opt.model and other options
     model.setup(opt)
     dataset = create_dataset(opt)  # create a dataset given opt.dataset_mode and other options
     dataset_size = len(dataset)    # get the number of images in the dataset.
     print('The number of training images = %d' % dataset_size)
 
-    visualizer = Visualizer(opt)   # create a visualizer that display/save images and plots
+    # visualizer = Visualizer(opt)   # create a visualizer that display/save images and plots
     total_iters = 0                # the total number of training iterations
 
     for epoch in range(opt.epoch_count,
@@ -46,7 +48,7 @@ def main():
         epoch_start_time = time.time()  # timer for entire epoch
         iter_data_time = time.time()  # timer for data loading per iteration
         epoch_iter = 0  # the number of training iterations in current epoch, reset to 0 every epoch
-        visualizer.reset()  # reset the visualizer: make sure it saves the results to HTML at least once every epoch
+        # visualizer.reset()  # reset the visualizer: make sure it saves the results to HTML at least once every epoch
 
         model.update_learning_rate()  # update learning rates in the beginning of every epoch.
         for i, data in enumerate(dataset):  # inner loop within one epoch
