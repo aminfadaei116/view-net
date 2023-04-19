@@ -6,7 +6,8 @@ import torch
 from .base_model import BaseModel
 from . import networks
 from models.image2image import render_image
-
+import torchvision
+import torchvision.transforms as T
 
 class Pix2PixModel(BaseModel):
     """ This class implements the pix2pix model, for learning a mapping from input images to output images given paired data.
@@ -85,14 +86,17 @@ class Pix2PixModel(BaseModel):
         The option 'direction' can be used to swap images in domain A and domain B.
         """
         AtoB = self.opt.direction == 'AtoB'
-        self.real_B = input['B' if AtoB else 'A'].to(self.device)
+
         B_key = torch.squeeze(input['B_key' if AtoB else 'A_key']).to(self.device)
         A_key = torch.squeeze(input['A_key' if AtoB else 'B_key']).to(self.device)
         with torch.no_grad():
-            self.real_A = render_image(self.config, 256, 256,
+
+            self.real_A = render_image(self.config, input['A'].shape[2], input['A'].shape[3],
                                        A_key, B_key, input['A' if AtoB else 'B'].to(self.device), sd=0.01)
 
         self.image_paths = input['A_paths' if AtoB else 'B_paths']
+        self.real_A = torchvision.transforms.Resize((256, 256))(self.real_A)
+        self.real_B = torchvision.transforms.Resize((256, 256))(input['B' if AtoB else 'A'].to(self.device))
 
     def forward(self):
         """Run forward pass; called by both functions <optimize_parameters> and <test>."""

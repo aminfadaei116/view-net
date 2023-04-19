@@ -9,7 +9,7 @@ import ntpath
 import time
 from . import util_pix2pix, html
 from subprocess import Popen, PIPE
-
+from . import util, html
 
 try:
     import wandb
